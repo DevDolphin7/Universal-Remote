@@ -1,6 +1,7 @@
 from time import sleep_ms
 from machine import SPI, Pin
 from framebuf import FrameBuffer, MONO_HLSB
+from hardware import HW
 
 """
 Driver for Waveshare e-Paper 1.54in V2
@@ -28,11 +29,11 @@ class EPD:
 
     def __init__(
         self,
-        spi=SPI(0, baudrate=2000000, sck=Pin(18), mosi=Pin(19)),
-        cs=Pin(17),
-        dc=Pin(20),
-        rst=Pin(21),
-        busy=Pin(16),
+        spi=SPI(0, baudrate=2000000, sck=HW.epd_sdk, mosi=HW.epd_mosi),
+        cs=HW.epd_cs,
+        dc=HW.epd_dc,
+        rst=HW.epd_rst,
+        busy=HW.epd_busy,
         width=200,
         height=200,
     ):

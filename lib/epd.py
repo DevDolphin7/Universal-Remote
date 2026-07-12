@@ -1,13 +1,19 @@
 from machine import Pin
 from epd1in54_V2 import EPD
 from time import sleep_ms
+from hardware import HW
 
 
 class E_Paper_Display(EPD):
     def __init__(self):
         super().__init__()
+        self._timeout_interval = 20  # ms
+
         self.menu = ["Weather", "Clock", "Settings", "About"]
         self.selected = 0
+
+        self.button = HW.epd_button1
+
         self.draw_menu()
 
     def draw_menu(self):
@@ -29,12 +35,10 @@ class E_Paper_Display(EPD):
         self.update()
 
     def handle_button_press(self):
-        button = Pin(15, Pin.IN, Pin.PULL_UP)
-
-        if button.value() == 0:
+        if self.button.value() == 0:
             sleep_ms(50)
 
-            if button.value() == 0:
+            if self.button.value() == 0:
                 self.selected += 1
 
                 if self.selected >= len(self.menu):
@@ -42,5 +46,5 @@ class E_Paper_Display(EPD):
 
                 self.draw_menu()
 
-                while button.value() == 0:
-                    sleep_ms(10)
+                while self.button.value() == 0:
+                    sleep_ms(self._timeout_interval)

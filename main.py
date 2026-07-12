@@ -1,12 +1,23 @@
 from time import sleep_ms
+from lib.storage import Storage
 from lib.epd import E_Paper_Display
-from lib.ir import IR_Reciever, IR_Transmitter
+from lib.ir import IR
 
-epd = E_Paper_Display()
-ir_rx = IR_Reciever()
-ir_tx = IR_Transmitter()
 
-while True:
-    epd.handle_button_press()
-    ir_tx.handle_button_press()
-    sleep_ms(100)
+class UniversalRemote:
+    def __init__(self):
+        self.storage = Storage("remotes.json")
+        self.devices = self.storage.load()
+
+        self.epd = E_Paper_Display()
+        self.ir = IR()
+
+    def run(self):
+        while True:
+            self.epd.handle_button_press()
+            self.ir.handle_button_press()
+            self.ir.tx.handle_button_press(0x0044)
+            sleep_ms(100)
+
+
+UniversalRemote().run()

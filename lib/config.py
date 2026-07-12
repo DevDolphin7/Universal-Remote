@@ -1,0 +1,16 @@
+# E-Paper Display GPIO Pin Numbers
+EPD_SCK = 18
+EPD_MOSI = 19
+EPD_CS = 17
+EPD_DC = 20
+EPD_RST = 21
+EPD_BUSY = 16
+
+# IR GPIO Pin Numbers
+IR_RX = 10
+IR_TX = 11
+
+# Button GPIO Pin Numbers
+IR_PROTOCOL_BUTTON = 9
+IR_TX_BUTTON1 = 14
+EPD_BUTTON1 = 15

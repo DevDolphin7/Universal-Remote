@@ -1,0 +1,14 @@
+[
+    {
+        "devive_name": "TV Remote",
+        "address": 0,
+        "button1_command": 0,
+        "button_release": -1
+    },
+    {
+        "devive_name": "TV Remote 2",
+        "address": 0,
+        "button1_command": 0,
+        "button_release": -1
+    }
+]
