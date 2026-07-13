@@ -4,7 +4,7 @@ from time import sleep_ms
 from hardware import HW
 
 
-class E_Paper_Display(EPD):
+class EPaperDisplay(EPD):
     def __init__(self):
         super().__init__()
         self._timeout_interval = 20  # ms

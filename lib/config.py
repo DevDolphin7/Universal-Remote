@@ -12,5 +12,8 @@ IR_TX = 11
 
 # Button GPIO Pin Numbers
 IR_PROTOCOL_BUTTON = 9
-IR_TX_BUTTON1 = 14
+IR_TX_BUTTON_1 = 14
 EPD_BUTTON1 = 15
+
+# Cutomisable Buttons GPIO Pin Numbers
+CUSTOM_BUTTON_1 = 8
