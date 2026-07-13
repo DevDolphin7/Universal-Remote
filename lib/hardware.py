@@ -14,4 +14,6 @@ class HW:
     ir_rx = Pin(config.IR_RX, Pin.IN)
     ir_protocol_button = Pin(config.IR_PROTOCOL_BUTTON, Pin.IN, Pin.PULL_UP)
     ir_tx = Pin(config.IR_TX, Pin.IN)
-    ir_tx_button1 = Pin(config.IR_TX_BUTTON1, Pin.IN, Pin.PULL_UP)
+    ir_tx_button1 = Pin(config.IR_TX_BUTTON_1, Pin.IN, Pin.PULL_UP)
+
+    custom_button1 = Pin(config.CUSTOM_BUTTON_1, Pin.IN, Pin.PULL_UP)
