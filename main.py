@@ -1,8 +1,8 @@
-from time import sleep_ms
+from utime import sleep_ms
+from lib.managers.battery import battery
 from lib.managers.storage import Storage
 from lib.managers.epd import EPaperDisplay
-from lib.managers.ir import IR
-from lib.managers.battery import BatteryManager
+from lib.managers.ir import IRManager
 from lib.managers.buttons import ButtonManager
 
 
@@ -12,21 +12,24 @@ class UniversalRemote:
         self.devices = self.storage.load()
 
         self.epd = EPaperDisplay()
-        self.ir = IR()
-        self.battery = BatteryManager()
+        self.ir = IRManager()
         self.buttons = ButtonManager()
-        self.count = 0
+
+        self._loop_interval = 100  # ms
+        self._battery_check_interval = 15000  # ms
+        self._voltage = 0.0
+        self._count = 0
 
     def run(self):
         while True:
             self.buttons.update()
-            sleep_ms(100)
-            self.count += 1
-            if self.count == 1:
-                self.test()
 
-    def test(self):
-        self.epd.draw_menu(voltage=self.battery.get_voltage())
+            self._count += 1
+            if (self._count * self._loop_interval) > self._battery_check_interval:
+                self._count = 0
+                battery.update()
+
+            sleep_ms(self._loop_interval)
 
 
 UniversalRemote().run()
