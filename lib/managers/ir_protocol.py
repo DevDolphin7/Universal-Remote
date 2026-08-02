@@ -10,10 +10,12 @@ from lib.drivers.ir_tx.sony import (
     SONY_20 as SONY_20_TX,
 )
 from lib.drivers.ir_tx.mce import MCE as MCE_TX
+from lib.managers.hardware import Hardware
 
 
 class IRProtocol:
-    def __init__(self, start_index=0):
+    def __init__(self, start_index=0) -> None:
+        """Initializes the IRProtocol with a starting index and sets up the available RX and TX protocols."""
         self._index = start_index
         self._rx_protocols = [
             ("NEC_8", NEC_8),
@@ -39,27 +41,44 @@ class IRProtocol:
         ]
 
     def get_rx_name(self) -> str:
+        """Returns the name of the current RX protocol."""
         return self._rx_protocols[self._index][0]
 
-    def get_rx(self) -> type:
+    def get_rx(
+        self,
+    ) -> type[
+        NEC_8 | NEC_16 | SAMSUNG | RC5_IR | RC6_M0 | SONY_12 | SONY_15 | SONY_20 | MCE
+    ]:
+        """Returns the class of the current RX protocol."""
         return self._rx_protocols[self._index][1]
 
-    def set_index_from_rx(self, rx_name: str):
-        for index, item in enumerate(self._rx_protocols):
-            if rx_name == item[0]:
-                self._index = index
-
     def get_tx_name(self) -> str:
+        """Returns the name of the current TX protocol."""
         return self._tx_protocols[self._index][0]
 
-    def get_tx(self) -> type:
+    def get_tx(
+        self,
+    ) -> type[
+        NEC_TX | RC5_TX | RC6_M0_TX | SONY_12_TX | SONY_15_TX | SONY_20_TX | MCE_TX
+    ]:
+        """Returns the class of the current TX protocol."""
         return self._tx_protocols[self._index][1]
 
-    def change_protocol(self):
+    def change_protocol(self, callback) -> None:
+        """Changes the current IR protocol for both the receiver and transmitter."""
         self._index += 1
         if self._index >= len(self._rx_protocols):
             self._index = 0
 
+        self.set_rx(callback)
+        self.set_tx()
+
         print(f"Changed protocol to Rx: {self.get_rx()} and Tx: {self.get_tx()}")
 
-        return self.get_rx()
+    def set_rx(self, callback) -> None:
+        """Sets the RX protocol to the current index."""
+        self.rx = self.get_rx()(Hardware.ir_rx, callback)
+
+    def set_tx(self) -> None:
+        """Sets the TX protocol to the current index."""
+        self.tx = self.get_tx()(Hardware.ir_tx)

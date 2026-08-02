@@ -1,12 +1,12 @@
-from machine import Pin
 from time import sleep_ms, ticks_ms, ticks_diff
 from lib.managers.ir_protocol import IRProtocol
 from lib.managers.hardware import Buttons, Hardware as HW
 from lib.core.event_bus import event_bus, Events
 
 
-class IR:
-    def __init__(self):
+class IRManager:
+    def __init__(self) -> None:
+        """Initializes the IR manager, sets up the IR receiver and transmitter, and subscribes to button events."""
         self.last_recieved = None
         self._button_learn_timeout = 10000  # ms
         self._button_learn_interval = 100  # ms
@@ -19,26 +19,31 @@ class IR:
         self._event_bus.subscribe(Events.BUTTON_PRESSED, self.on_button_press)
         self._event_bus.subscribe(Events.BUTTON_RELEASED, self.on_button_release)
 
-    def on_button_press(self, button_name):
+    def on_button_press(self, button_name) -> None:
+        """Handles button press events for IR-related actions such as changing protocols, transmitting commands, and learning new commands."""
         if button_name == Buttons.CHANGE_IR_PROTOCOL:
             self.change_protocol()
+            self._event_bus.publish(
+                Events.IR_PROTOCOL_CHANGED, self._protocol.get_rx_name()
+            )
 
         if button_name == Buttons.TRANSMIT_IR:
-            print("Transmitting IR command: 0x0041")
             self.tx.send_hex_command(0x0041)
+            self._event_bus.publish(Events.IR_TRANSMITTED, 0x0041)
 
         if button_name == Buttons.LEARN_IR:
             self.get_custom_button_data()
 
-    def on_button_release(self, button_name):
+    def on_button_release(self, button_name) -> None:
+        """Handles button release events for IR-related actions."""
         if button_name == Buttons.TRANSMIT_IR:
-            self.tx.send_hex_command(-0x0001)
+            self.tx.send_hex_command(0x0000)
+            self._event_bus.publish(Events.IR_TRANSMITTED, 0x0000)
 
-    def change_protocol(self):
+    def change_protocol(self) -> None:
+        """Changes the current IR protocol for both the receiver and transmitter."""
         self.rx.close()
-        self._protocol.change_protocol()
-        self.rx.set_protocol()
-        self.tx.set_protocol()
+        self._protocol.change_protocol(self.rx.print_received_ir)
 
     def get_custom_button_data(self):
         commands = self.rx.last_commands
@@ -57,15 +62,18 @@ class IR:
 
 
 class IRReciever:
-    def __init__(self, protocol: IRProtocol):
-        self.protocol = protocol
-        self._received_index = 0
-        self._recieved_ticks = 0
+    def __init__(self, protocol: IRProtocol) -> None:
+        """Initializes the IR receiver with a given protocol and sets up the callback for received data."""
         self.last_commands = []
 
-        self.set_protocol()
+        self._protocol = protocol
+        self._received_index = 0
+        self._recieved_ticks = 0
 
-    def print_received(self, data, address, *control):
+        self._protocol.set_rx(self.print_received_ir)
+
+    def print_received_ir(self, data, address, *control) -> None:
+        """Callback function to handle received IR data, printing it and storing it in the last_commands list."""
         print(f"Address: {address:#04x}, Command: {data:#04x}, Control: {control}")
         print("---")
         if address is not None:
@@ -93,37 +101,34 @@ class IRReciever:
             if self._received_index > 255:
                 self._received_index = 0
 
-    def set_protocol(self):
-        self.rx = self.protocol.get_rx()(HW.ir_rx, self.print_received)
-
-    def close(self):
-        self.rx.close()
+    def close(self) -> None:
+        """Closes the IR receiver."""
+        self._protocol.rx.close()
 
 
 class IRTransmitter:
-    def __init__(self, address: int, protocol: IRProtocol):
+    def __init__(self, address: int, protocol: IRProtocol) -> None:
+        """Initializes the IR transmitter with a given address and protocol."""
         self._address = address
         self._previous = 1
         self._timeout = 500  # ms
         self._timeout_interval = 20  # ms
 
-        self.protocol = protocol
+        self._protocol = protocol
+        self._protocol.set_tx()
 
-        self.set_protocol()
-
-    def set_protocol(self):
-        self.tx = self.protocol.get_tx()(HW.ir_tx)
-
-    def transmit_and_wait(self, address, command):
-        self.tx.transmit(address, command)
+    def transmit_and_wait(self, address, command) -> None:
+        """Transmits an IR command and waits for the transmission to complete, raising a TimeoutError if it takes too long."""
+        self._protocol.tx.transmit(address, command)
 
         time_elapsed = 0
-        while self.tx.busy() and time_elapsed < self._timeout:
+        while self._protocol.tx.busy() and time_elapsed < self._timeout:
             sleep_ms(self._timeout_interval)
             time_elapsed += self._timeout_interval
 
             if time_elapsed > self._timeout:
                 raise TimeoutError("Transmission timeout")
 
-    def send_hex_command(self, command: int):
+    def send_hex_command(self, command: int) -> None:
+        """Sends a hexadecimal IR command"""
         self.transmit_and_wait(self._address, command)
