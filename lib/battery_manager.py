@@ -17,6 +17,7 @@ class BatteryManager:
     def get_voltage(self):
         """Reads the battery voltage multiple times and returns the average voltage."""
         total = 0.0
+        self.read_voltage()  # Discard the first reading to allow the ADC to stabilize
 
         for _ in range(self.sample_size):
             total += self.read_voltage()
