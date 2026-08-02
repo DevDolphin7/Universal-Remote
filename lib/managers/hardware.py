@@ -1,22 +1,26 @@
-from machine import Pin
+from machine import Pin, ADC
 import lib.core.config as config
 
 
 class Hardware:
-    epd_sdk = Pin(config.EPD_SCK)
-    epd_mosi = Pin(config.EPD_MOSI)
-    epd_cs = Pin(config.EPD_CS)
-    epd_dc = Pin(config.EPD_DC)
-    epd_rst = Pin(config.EPD_RST)
-    epd_busy = Pin(config.EPD_BUSY)
-    epd_button1 = Pin(config.EPD_BUTTON1, Pin.IN, Pin.PULL_UP)
+    vsys = ADC(config.VOLTAGE_DIVIDER_PIN)
 
-    ir_rx = Pin(config.IR_RX, Pin.IN)
-    ir_protocol_button = Pin(config.IR_PROTOCOL_BUTTON, Pin.IN, Pin.PULL_UP)
-    ir_tx = Pin(config.IR_TX, Pin.IN)
-    ir_tx_button1 = Pin(config.IR_TX_BUTTON_1, Pin.IN, Pin.PULL_UP)
+    epd_sdk = Pin(config.GPIO_EPD_SCK)
+    epd_mosi = Pin(config.GPIO_EPD_MOSI)
+    epd_cs = Pin(config.GPIO_EPD_CS)
+    epd_dc = Pin(config.GPIO_EPD_DC)
+    epd_rst = Pin(config.GPIO_EPD_RST)
+    epd_busy = Pin(config.GPIO_EPD_BUSY)
 
-    learn_ir_button = Pin(config.LEARN_IR_BUTTON1, Pin.IN, Pin.PULL_UP)
+    ir_rx = Pin(config.GPIO_IR_RX, Pin.IN)
+    ir_tx = Pin(config.GPIO_IR_TX, Pin.IN)
+
+    menu_select_button = Pin(config.GPIO_MENU_SELECT_BUTTON, Pin.IN, Pin.PULL_UP)
+    change_ir_protocol_button = Pin(
+        config.GPIO_CHANGE_IR_PROTOCOL_BUTTON, Pin.IN, Pin.PULL_UP
+    )
+    transmit_ir_button = Pin(config.GPIO_TRANSMIT_IR_BUTTON, Pin.IN, Pin.PULL_UP)
+    learn_ir_button = Pin(config.GPIO_LEARN_IR_BUTTON, Pin.IN, Pin.PULL_UP)
 
 
 class Buttons:
