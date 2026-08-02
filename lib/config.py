@@ -17,3 +17,6 @@ EPD_BUTTON1 = 15
 
 # Cutomisable Buttons GPIO Pin Numbers
 CUSTOM_BUTTON_1 = 8
+
+# Battery GPIO Pin Numbers
+VOLTAGE_DIVIDER_PIN = 26
