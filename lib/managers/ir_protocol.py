@@ -1,15 +1,15 @@
-from ir_rx.nec import NEC_8, NEC_16, SAMSUNG
-from ir_rx.philips import RC5_IR, RC6_M0
-from ir_rx.sony import SONY_12, SONY_15, SONY_20
-from ir_rx.mce import MCE
-from ir_tx.nec import NEC as NEC_TX
-from ir_tx.philips import RC5 as RC5_TX, RC6_M0 as RC6_M0_TX
-from ir_tx.sony import (
+from lib.drivers.ir_rx.nec import NEC_8, NEC_16, SAMSUNG
+from lib.drivers.ir_rx.philips import RC5_IR, RC6_M0
+from lib.drivers.ir_rx.sony import SONY_12, SONY_15, SONY_20
+from lib.drivers.ir_rx.mce import MCE
+from lib.drivers.ir_tx.nec import NEC as NEC_TX
+from lib.drivers.ir_tx.philips import RC5 as RC5_TX, RC6_M0 as RC6_M0_TX
+from lib.drivers.ir_tx.sony import (
     SONY_12 as SONY_12_TX,
     SONY_15 as SONY_15_TX,
     SONY_20 as SONY_20_TX,
 )
-from ir_tx.mce import MCE as MCE_TX
+from lib.drivers.ir_tx.mce import MCE as MCE_TX
 
 
 class IRProtocol:

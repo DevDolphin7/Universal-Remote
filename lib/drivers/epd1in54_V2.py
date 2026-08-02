@@ -1,7 +1,7 @@
 from time import sleep_ms
 from machine import SPI, Pin
 from framebuf import FrameBuffer, MONO_HLSB
-from hardware import HW
+from lib.managers.hardware import Hardware as HW
 
 """
 Driver for Waveshare e-Paper 1.54in V2
