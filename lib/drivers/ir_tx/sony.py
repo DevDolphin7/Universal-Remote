@@ -5,7 +5,7 @@
 # Copyright Peter Hinch 2020 Released under the MIT license
 
 from micropython import const
-from lib.ir_tx import IR
+from lib.drivers.ir_tx import IR
 
 
 class SONY_ABC(IR):

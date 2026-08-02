@@ -1,7 +1,8 @@
 from machine import Pin
 from time import sleep_ms, ticks_ms, ticks_diff
-from ir_protocol import IRProtocol
-from hardware import HW
+from lib.managers.ir_protocol import IRProtocol
+from lib.managers.hardware import Buttons, Hardware as HW
+from lib.core.event_bus import event_bus, Events
 
 
 class IR:
@@ -9,40 +10,49 @@ class IR:
         self.last_recieved = None
         self._button_learn_timeout = 10000  # ms
         self._button_learn_interval = 100  # ms
-        self._previous = 1
+
         self._protocol = IRProtocol()
         self.rx = IRReciever(self._protocol)
         self.tx = IRTransmitter(4, self._protocol)
 
-        self.button = HW.ir_protocol_button
-        self.custom_button1 = HW.custom_button1
+        self._event_bus = event_bus
+        self._event_bus.subscribe(Events.BUTTON_PRESSED, self.on_button_press)
+        self._event_bus.subscribe(Events.BUTTON_RELEASED, self.on_button_release)
 
-    def handle_button_press(self):
-        current = self.button.value()
+    def on_button_press(self, button_name):
+        if button_name == Buttons.CHANGE_IR_PROTOCOL:
+            self.change_protocol()
 
-        if self._previous == 1 and current == 0:
-            self.rx.close()
-            self._protocol.change_protocol()
-            self.rx.set_rx()
-            self.tx.set_tx()
-        self._previous = current
+        if button_name == Buttons.TRANSMIT_IR:
+            print("Transmitting IR command: 0x0041")
+            self.tx.send_hex_command(0x0041)
+
+        if button_name == Buttons.LEARN_IR:
+            self.get_custom_button_data()
+
+    def on_button_release(self, button_name):
+        if button_name == Buttons.TRANSMIT_IR:
+            self.tx.send_hex_command(-0x0001)
+
+    def change_protocol(self):
+        self.rx.close()
+        self._protocol.change_protocol()
+        self.rx.set_protocol()
+        self.tx.set_protocol()
 
     def get_custom_button_data(self):
-        current = self.custom_button1.value()
+        commands = self.rx.last_commands
+        timeout = 0
 
-        if self._previous == 1 and current == 0:
-            commands = self.rx.last_commands
-            timeout = 0
-            print("here we go")
-            while self.rx.last_commands[0]["index"] == commands[0]["index"]:
-                sleep_ms(self._button_learn_interval)
-                timeout += self._button_learn_interval
-                if timeout > self._button_learn_timeout:
-                    TimeoutError("No IR data recieved prior to timeout")
-            self.last_recieved = self.rx.last_commands
-            print(f"set last recieved: {self.last_recieved}")
+        print("here we go")
+        while self.rx.last_commands[0]["index"] == commands[0]["index"]:
+            sleep_ms(self._button_learn_interval)
+            timeout += self._button_learn_interval
+            if timeout > self._button_learn_timeout:
+                TimeoutError("No IR data recieved prior to timeout")
+        self.last_recieved = self.rx.last_commands
+        print(f"set last recieved: {self.last_recieved}")
 
-        self._previous = current
         return self.last_recieved
 
 
@@ -53,7 +63,7 @@ class IRReciever:
         self._recieved_ticks = 0
         self.last_commands = []
 
-        self.set_rx()
+        self.set_protocol()
 
     def print_received(self, data, address, *control):
         print(f"Address: {address:#04x}, Command: {data:#04x}, Control: {control}")
@@ -83,7 +93,7 @@ class IRReciever:
             if self._received_index > 255:
                 self._received_index = 0
 
-    def set_rx(self):
+    def set_protocol(self):
         self.rx = self.protocol.get_rx()(HW.ir_rx, self.print_received)
 
     def close(self):
@@ -99,10 +109,9 @@ class IRTransmitter:
 
         self.protocol = protocol
 
-        self.set_tx()
-        self.button = HW.ir_tx_button1
+        self.set_protocol()
 
-    def set_tx(self):
+    def set_protocol(self):
         self.tx = self.protocol.get_tx()(HW.ir_tx)
 
     def transmit_and_wait(self, address, command):
@@ -116,11 +125,5 @@ class IRTransmitter:
             if time_elapsed > self._timeout:
                 raise TimeoutError("Transmission timeout")
 
-    def handle_button_press(self, command: int):
-        current = self.button.value()
-
-        if self._previous == 1 and current == 0:
-            self.transmit_and_wait(self._address, 0x0041)
-            self.transmit_and_wait(self._address, command)
-
-        self._previous = current
+    def send_hex_command(self, command: int):
+        self.transmit_and_wait(self._address, command)

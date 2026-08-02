@@ -7,7 +7,7 @@
 # WARNING: This is experimental and subject to change.
 
 from utime import ticks_us, ticks_diff
-from lib.ir_rx import IR_RX
+from lib.drivers.ir_rx import IR_RX
 
 
 class MCE(IR_RX):

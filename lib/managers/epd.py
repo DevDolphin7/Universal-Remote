@@ -1,7 +1,8 @@
 from machine import Pin
-from epd1in54_V2 import EPD
+from lib.drivers.epd1in54_V2 import EPD
 from time import sleep_ms
-from hardware import HW
+from lib.managers.hardware import Buttons
+from lib.core.event_bus import event_bus, Events
 
 
 class EPaperDisplay(EPD):
@@ -12,7 +13,8 @@ class EPaperDisplay(EPD):
         self.menu = ["Weather", "Clock", "Settings", "About"]
         self.selected = 0
 
-        self.button = HW.epd_button1
+        self._event_bus = event_bus
+        self._event_bus.subscribe(Events.BUTTON_PRESSED, self.on_button_press)
 
     def draw_menu(self, voltage=0.0):
         self.frame_buffer.fill(1)
@@ -34,17 +36,11 @@ class EPaperDisplay(EPD):
 
         self.update()
 
-    def handle_button_press(self):
-        if self.button.value() == 0:
-            sleep_ms(50)
+    def on_button_press(self, button_name):
+        if button_name == Buttons.MENU_SELECT:
+            self.selected += 1
 
-            if self.button.value() == 0:
-                self.selected += 1
+            if self.selected >= len(self.menu):
+                self.selected = 0
 
-                if self.selected >= len(self.menu):
-                    self.selected = 0
-
-                self.draw_menu()
-
-                while self.button.value() == 0:
-                    sleep_ms(self._timeout_interval)
+            self.draw_menu()

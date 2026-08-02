@@ -1,8 +1,8 @@
 from machine import Pin
-import config
+import lib.core.config as config
 
 
-class HW:
+class Hardware:
     epd_sdk = Pin(config.EPD_SCK)
     epd_mosi = Pin(config.EPD_MOSI)
     epd_cs = Pin(config.EPD_CS)
@@ -16,4 +16,11 @@ class HW:
     ir_tx = Pin(config.IR_TX, Pin.IN)
     ir_tx_button1 = Pin(config.IR_TX_BUTTON_1, Pin.IN, Pin.PULL_UP)
 
-    custom_button1 = Pin(config.CUSTOM_BUTTON_1, Pin.IN, Pin.PULL_UP)
+    learn_ir_button = Pin(config.LEARN_IR_BUTTON1, Pin.IN, Pin.PULL_UP)
+
+
+class Buttons:
+    MENU_SELECT = config.MENU_SELECT_BUTTON
+    CHANGE_IR_PROTOCOL = config.CHANGE_IR_PROTOCOL_BUTTON
+    TRANSMIT_IR = config.TRANSMIT_IR_BUTTON
+    LEARN_IR = config.LEARN_IR_BUTTON

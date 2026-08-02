@@ -10,13 +10,13 @@ from sys import platform
 import time
 import gc
 from machine import Pin, freq
-from lib.ir_rx.print_error import print_error  # Optional print of error codes
+from lib.drivers.ir_rx.print_error import print_error  # Optional print of error codes
 
 # Import all implemented classes
-from lib.ir_rx.nec import NEC_8, NEC_16, SAMSUNG
-from lib.ir_rx.sony import SONY_12, SONY_15, SONY_20
-from lib.ir_rx.philips import RC5_IR, RC6_M0
-from lib.ir_rx.mce import MCE
+from lib.drivers.ir_rx.nec import NEC_8, NEC_16, SAMSUNG
+from lib.drivers.ir_rx.sony import SONY_12, SONY_15, SONY_20
+from lib.drivers.ir_rx.philips import RC5_IR, RC6_M0
+from lib.drivers.ir_rx.mce import MCE
 
 # Define pin according to platform
 if platform == "pyboard":

@@ -16,7 +16,7 @@ else:
 from micropython import const
 import uasyncio as asyncio
 from aswitch import Switch, Delay_ms
-from lib.ir_tx.mce import MCE
+from lib.drivers.ir_tx.mce import MCE
 
 loop = asyncio.get_event_loop()
 _FIRST = const(0)

@@ -7,7 +7,7 @@
 # WARNING: This is experimental and subject to change.
 
 from micropython import const
-from lib.ir_tx import IR
+from lib.drivers.ir_tx import IR
 
 _TBIT = const(500)  # Time (μs) for pulse of carrier
 
