@@ -39,7 +39,7 @@ class EPaperDisplay(EPD):
 
         self.update()
 
-    def on_button_press(self, button_name) -> None:
+    def on_button_press(self, button_name, *args, **kwargs) -> None:
         """Handles button press events to navigate the menu."""
         if button_name == Buttons.MENU_SELECT:
             self.selected += 1

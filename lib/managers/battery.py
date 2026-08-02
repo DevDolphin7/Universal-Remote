@@ -1,5 +1,12 @@
+from time import ticks_ms, ticks_diff
 from lib.managers.hardware import Hardware
 from lib.core.event_bus import event_bus, Events
+
+
+class PowerState:
+    ACTIVE = 0
+    IDLE = 1
+    DEEP_SLEEP = 2
 
 
 class BatteryManager:
@@ -10,11 +17,25 @@ class BatteryManager:
         self.voltage = 0.0
         self.percentage = 0
         self.status = 0
+        self.current_state = PowerState.ACTIVE
 
         self._vsys = Hardware.vsys
         self._adc_volt_conversion_factor = 3.3 * 2 / 65535
         self._sample_size = 16
+        self._last_activity = ticks_ms()
+        self._deep_sleep_interval = 5000  # ms
+        self._idle_interval = 2000  # ms
+
         self._event_bus = event_bus
+        self._event_bus.subscribe(Events.BUTTON_RELEASED, self._on_activity)
+
+    def _on_activity(self, *args, **kwargs) -> None:
+        """Handles activity events to update the battery status."""
+        self._last_activity = ticks_ms()
+        if self.current_state != PowerState.ACTIVE:
+            print("Woken up")
+            self.current_state = PowerState.ACTIVE
+            self._event_bus.publish(Events.WAKE)
 
     def update(self) -> None:
         """Updates the battery status by reading the current voltage and calculating the percentage."""
@@ -24,6 +45,20 @@ class BatteryManager:
 
         if self.is_battery_low():
             self._event_bus.publish(Events.LOW_BATTERY, self.percentage)
+
+        self.poll()
+
+    def poll(self):
+        elapsed = ticks_diff(ticks_ms(), self._last_activity)
+
+        if (
+            elapsed > self._deep_sleep_interval
+            and self.current_state != PowerState.DEEP_SLEEP
+        ):
+            self._enter_deep_sleep()
+
+        elif elapsed > self._idle_interval and self.current_state == PowerState.ACTIVE:
+            self._enter_idle()
 
     def read_voltage(self) -> float:
         """Reads the voltage from the battery using the ADC and returns the calculated voltage."""
@@ -43,14 +78,12 @@ class BatteryManager:
 
     def get_battery_percentage(self) -> int:
         """Calculates the battery percentage based on the current voltage."""
-        voltage = self.get_voltage()
-
-        if voltage >= self.full_voltage:
+        if self.voltage >= self.full_voltage:
             return 100
-        elif voltage <= self.empty_voltage:
+        elif self.voltage <= self.empty_voltage:
             return 0
         else:
-            percentage = (voltage - self.empty_voltage) / (
+            percentage = (self.voltage - self.empty_voltage) / (
                 self.full_voltage - self.empty_voltage
             )
             return round(percentage * 100)
@@ -75,6 +108,16 @@ class BatteryManager:
     def is_battery_low(self, threshold=10) -> bool:
         """Checks if the battery percentage is below a specified threshold."""
         return self.percentage < threshold
+
+    def _enter_deep_sleep(self):
+        print("Entering deep")
+        self.current_state = PowerState.DEEP_SLEEP
+        self._event_bus.publish(Events.SLEEP_DEEP, PowerState.DEEP_SLEEP)
+
+    def _enter_idle(self):
+        print("Entering idle")
+        self.current_state = PowerState.IDLE
+        self._event_bus.publish(Events.SLEEP_IDLE, PowerState.IDLE)
 
 
 battery = BatteryManager()
