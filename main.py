@@ -1,3 +1,4 @@
+import network
 from utime import sleep_ms
 from lib.managers.battery import battery
 from lib.managers.storage import Storage
@@ -8,7 +9,10 @@ from lib.managers.buttons import ButtonManager
 
 class UniversalRemote:
     def __init__(self):
-        self.storage = Storage("remotes.json")
+        self.wlan = network.WLAN(network.STA_IF)
+        self.wlan.active(False)
+
+        self.storage = Storage("lib/storage/remotes.json")
         self.devices = self.storage.load()
 
         self.epd = EPaperDisplay()
@@ -16,8 +20,7 @@ class UniversalRemote:
         self.buttons = ButtonManager()
 
         self._loop_interval = 100  # ms
-        self._battery_check_interval = 15000  # ms
-        self._voltage = 0.0
+        self._battery_check_interval = 1000  # ms
         self._count = 0
 
     def run(self):
