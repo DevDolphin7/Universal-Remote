@@ -2,6 +2,7 @@ from lib.drivers.epd1in54_V2 import EPD
 from lib.core.event_bus import event_bus, Events
 from lib.managers.hardware import Buttons
 from lib.managers.battery import battery
+from lib.managers.storage import memory
 
 
 class EPaperDisplay(EPD):
@@ -10,7 +11,7 @@ class EPaperDisplay(EPD):
         super().__init__()
         self._timeout_interval = 20  # ms
 
-        self.menu = ["Weather", "Clock", "Settings", "About"]
+        self.menu = memory.get_device_names()
         self.selected = 0
 
         self._event_bus = event_bus
