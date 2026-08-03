@@ -1,7 +1,7 @@
 import network
 from utime import sleep_ms
 from lib.managers.battery import battery
-from lib.managers.storage import Storage
+from lib.managers.storage import memory
 from lib.managers.epd import EPaperDisplay
 from lib.managers.ir import IRManager
 from lib.managers.buttons import ButtonManager
@@ -12,8 +12,9 @@ class UniversalRemote:
         self.wlan = network.WLAN(network.STA_IF)
         self.wlan.active(False)
 
-        self.storage = Storage("lib/storage/remotes.json")
-        self.devices = self.storage.load()
+        self.memory = memory
+        self.devices = self.memory.load()
+        print(self.devices)
 
         self.epd = EPaperDisplay()
         self.ir = IRManager()
