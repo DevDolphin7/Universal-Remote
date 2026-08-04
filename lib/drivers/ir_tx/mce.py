@@ -12,7 +12,7 @@ from lib.drivers.ir_tx import IR
 _TBIT = const(500)  # Time (μs) for pulse of carrier
 
 
-class MCE(IR):
+class MCE_TX(IR):
     valid = (0xF, 0x3F, 3)  # Max addr, data, toggle
     init_cs = 4  # http://www.hifi-remote.com/johnsfine/DecodeIR.html#OrtekMCE says 3
 
