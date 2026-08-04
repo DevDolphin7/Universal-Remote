@@ -1,16 +1,15 @@
 from time import sleep_ms, ticks_ms, ticks_diff
-from lib.core.event_bus import event_bus, Events
+from lib.core.event_bus import event_bus
 from lib.managers.ir_protocol import IRProtocol
 from lib.managers.hardware import Buttons
-from lib.managers.storage import Device, memory
+from lib.managers.device import device
+from lib.core.types import Events, Device, IRData
 
 
 class IRManager:
     def __init__(self) -> None:
         """Initializes the IR manager, sets up the IR receiver and transmitter, and subscribes to button events."""
         self.last_recieved = None
-        self._button_learn_timeout = 10000  # ms
-        self._button_learn_interval = 100  # ms
 
         self._protocol = IRProtocol()
         self.rx = IRReciever(self._protocol)
@@ -23,7 +22,7 @@ class IRManager:
         self._event_bus.subscribe(Events.WAKE, self._on_wake)
 
     def _on_button_press(self, button_name, *args, **kwargs) -> None:
-        """Handles button press events for IR-related actions such as changing protocols, transmitting commands, and learning new commands."""
+        """Handles button press events for IR-related actions such as changing protocols, transmitting commands, and recieving new commands."""
         if button_name == Buttons.CHANGE_IR_PROTOCOL:
             self.change_protocol()
             self._event_bus.publish(
@@ -35,10 +34,7 @@ class IRManager:
             self._event_bus.publish(Events.IR_TRANSMITTED, 0x0041)
 
         elif button_name == Buttons.MENU_SELECT:
-            self.set_up_from_device(memory.)
-
-        # if button_name == Buttons.LEARN_IR:
-        #     self.get_custom_button_data()
+            self.set_up_from_device(device.get())
 
     def _on_button_release(self, button_name, *args, **kwargs) -> None:
         """Handles button release events for IR-related actions."""
@@ -57,10 +53,11 @@ class IRManager:
     def change_protocol(self) -> None:
         """Changes the current IR protocol for both the receiver and transmitter."""
         self.rx.close()
-        self._protocol.change_protocol(self.rx.print_received_ir)
+        self._protocol.change_protocol(self.rx.log_received_ir)
 
     def set_up_from_device(self, device: Device) -> None:
         self.change_protocol()
+        print(self._protocol.get_rx_name())
 
 
 class IRReciever:
@@ -71,16 +68,19 @@ class IRReciever:
         self._protocol = protocol
         self._received_index = 0
         self._recieved_ticks = 0
+        self._last_receievd_ticks = 0
+
+        self._event_bus = event_bus
 
         self.start()
 
     def start(self) -> None:
-        self._protocol.set_rx(self.print_received_ir)
+        self._protocol.set_rx(self.log_received_ir)
 
-    def print_received_ir(self, data, address, *control) -> None:
+    def log_received_ir(self, data, address, *control) -> None:
         """Callback function to handle received IR data, printing it and storing it in the last_commands list."""
-        print(f"Address: {address:#04x}, Command: {data:#04x}, Control: {control}")
-        print("---")
+        # print(f"Address: {address:#04x}, Command: {data:#04x}, Control: {control}")
+        # print("---")
         if address is not None:
             ticks = ticks_ms()
             self._received_index += 1
@@ -90,21 +90,29 @@ class IRReciever:
                     {
                         "index": self._received_index,
                         "address": address,
-                        "button1_command": data,
+                        "command": data,
                         "ticks diff": ticks_since_last_packet,
                     }
                 )
             else:
-                self.last_commands = [
-                    {
-                        "index": self._received_index,
-                        "address": address,
-                        "button1_command": data,
-                        "ticks diff": 0,
-                    }
-                ]
+                if len(self.last_commands) > 1:
+                    self.last_commands.pop(1)
+                self.last_commands.insert(
+                    0,
+                    IRData(
+                        address,
+                        data,
+                        self._protocol.get_rx_name(),
+                        self._received_index,
+                        ticks_diff(ticks_ms(), self._last_receievd_ticks),
+                    ),
+                )
+                self._last_receievd_ticks = ticks_ms()
+
             if self._received_index > 255:
                 self._received_index = 0
+
+            self._event_bus.publish(Events.IR_RECEIVED, self.last_commands)
 
     def close(self) -> None:
         """Closes the IR receiver."""
