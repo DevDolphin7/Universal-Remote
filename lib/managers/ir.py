@@ -1,7 +1,8 @@
 from time import sleep_ms, ticks_ms, ticks_diff
-from lib.managers.ir_protocol import IRProtocol
-from lib.managers.hardware import Buttons, Hardware as HW
 from lib.core.event_bus import event_bus, Events
+from lib.managers.ir_protocol import IRProtocol
+from lib.managers.hardware import Buttons
+from lib.managers.storage import Device, memory
 
 
 class IRManager:
@@ -29,12 +30,15 @@ class IRManager:
                 Events.IR_PROTOCOL_CHANGED, self._protocol.get_rx_name()
             )
 
-        if button_name == Buttons.TRANSMIT_IR:
+        elif button_name == Buttons.TRANSMIT_IR:
             self.tx.send_hex_command(0x0041)
             self._event_bus.publish(Events.IR_TRANSMITTED, 0x0041)
 
-        if button_name == Buttons.LEARN_IR:
-            self.get_custom_button_data()
+        elif button_name == Buttons.MENU_SELECT:
+            self.set_up_from_device(memory.)
+
+        # if button_name == Buttons.LEARN_IR:
+        #     self.get_custom_button_data()
 
     def _on_button_release(self, button_name, *args, **kwargs) -> None:
         """Handles button release events for IR-related actions."""
@@ -55,20 +59,8 @@ class IRManager:
         self.rx.close()
         self._protocol.change_protocol(self.rx.print_received_ir)
 
-    def get_custom_button_data(self):
-        commands = self.rx.last_commands
-        timeout = 0
-
-        print("here we go")
-        while self.rx.last_commands[0]["index"] == commands[0]["index"]:
-            sleep_ms(self._button_learn_interval)
-            timeout += self._button_learn_interval
-            if timeout > self._button_learn_timeout:
-                TimeoutError("No IR data recieved prior to timeout")
-        self.last_recieved = self.rx.last_commands
-        print(f"set last recieved: {self.last_recieved}")
-
-        return self.last_recieved
+    def set_up_from_device(self, device: Device) -> None:
+        self.change_protocol()
 
 
 class IRReciever:
