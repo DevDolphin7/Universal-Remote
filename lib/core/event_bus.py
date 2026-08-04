@@ -1,16 +1,3 @@
-class Events:
-    BUTTON_PRESSED = "BUTTON_PRESS"
-    BUTTON_RELEASED = "BUTTON_RELEASE"
-    DEVICE_CHANGED = "DEVICE_CHANGED"
-    IR_PROTOCOL_CHANGED = "IR_PROTOCOL_CHANGED"
-    IR_RECEIVED = "IR_RECEIVED"
-    IR_TRANSMITTED = "IR_TRANSMITTED"
-    LOW_BATTERY = "LOW_BATTERY"
-    SLEEP_IDLE = "SLEEP_IDLE"
-    SLEEP_DEEP = "SLEEP_DEEP"
-    WAKE = "WAKE"
-
-
 class EventBus:
     def __init__(self):
         self._subscribers = {}

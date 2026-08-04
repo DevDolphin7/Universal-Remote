@@ -1,12 +1,7 @@
 from time import ticks_ms, ticks_diff
 from lib.managers.hardware import Hardware
-from lib.core.event_bus import event_bus, Events
-
-
-class PowerState:
-    ACTIVE = 0
-    IDLE = 1
-    DEEP_SLEEP = 2
+from lib.core.event_bus import event_bus
+from lib.core.types import Events, PowerState
 
 
 class BatteryManager:
@@ -23,8 +18,8 @@ class BatteryManager:
         self._adc_volt_conversion_factor = 3.3 * 2 / 65535
         self._sample_size = 16
         self._last_activity = ticks_ms()
-        self._deep_sleep_interval = 5000  # ms
-        self._idle_interval = 2000  # ms
+        self._deep_sleep_interval = 120000  # ms
+        self._idle_interval = 60000  # ms
 
         self._event_bus = event_bus
         self._event_bus.subscribe(Events.BUTTON_RELEASED, self._on_activity)
@@ -40,10 +35,10 @@ class BatteryManager:
     def update(self) -> None:
         """Updates the battery status by reading the current voltage and calculating the percentage."""
         self.voltage = self.get_voltage()
-        self.percentage = self.get_battery_percentage()
-        self.status = self.get_battery_status()
+        self.percentage = self.get_percentage()
+        self.status = self.get_status()
 
-        if self.is_battery_low():
+        if self.is_low():
             self._event_bus.publish(Events.LOW_BATTERY, self.percentage)
 
         self.poll()
@@ -76,7 +71,7 @@ class BatteryManager:
 
         return round(total / self._sample_size, 2)
 
-    def get_battery_percentage(self) -> int:
+    def get_percentage(self) -> int:
         """Calculates the battery percentage based on the current voltage."""
         if self.voltage >= self.full_voltage:
             return 100
@@ -88,13 +83,13 @@ class BatteryManager:
             )
             return round(percentage * 100)
 
-    def get_battery_status(self) -> int:
+    def get_status(self) -> int:
         """Returns an integer indicating the battery status based on the current voltage.
         4: Battery is full (>= 75%)
         3: Battery is medium (>= 50% and < 75%)
         2: Battery is low (>= 25% and < 50%)
         1: Battery is very low (< 25%)"""
-        percentage = self.get_battery_percentage()
+        percentage = self.get_percentage()
 
         if percentage >= 75:
             return 4
@@ -105,7 +100,7 @@ class BatteryManager:
         else:
             return 1
 
-    def is_battery_low(self, threshold=10) -> bool:
+    def is_low(self, threshold=10) -> bool:
         """Checks if the battery percentage is below a specified threshold."""
         return self.percentage < threshold
 

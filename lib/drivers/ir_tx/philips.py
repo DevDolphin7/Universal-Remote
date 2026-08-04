@@ -44,7 +44,7 @@ _T_RC6 = const(444)
 _T2_RC6 = const(889)
 
 
-class RC6_M0(IR):
+class RC6_M0_TX(IR):
     valid = (0xFF, 0xFF, 1)  # Max addr, data, toggle
 
     def __init__(self, pin, freq=36000, verbose=False):
