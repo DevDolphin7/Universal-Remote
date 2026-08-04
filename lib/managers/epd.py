@@ -1,8 +1,9 @@
 from lib.drivers.epd1in54_V2 import EPD
-from lib.core.event_bus import event_bus, Events
+from lib.core.event_bus import event_bus
 from lib.managers.hardware import Buttons
 from lib.managers.battery import battery
-from lib.managers.storage import memory
+from lib.managers.device import device
+from lib.core.types import Events
 
 
 class EPaperDisplay(EPD):
@@ -11,7 +12,7 @@ class EPaperDisplay(EPD):
         super().__init__()
         self._timeout_interval = 20  # ms
 
-        self.menu = memory.get_device_names()
+        self.menu = device.get_names()
         self.selected = 0
 
         self._event_bus = event_bus
@@ -34,9 +35,7 @@ class EPaperDisplay(EPD):
             self.frame_buffer.text(text, 20, y, 0)
             y += 25
 
-        self.frame_buffer.text(
-            f"Battery: {battery.get_battery_percentage()}%", 20, 180, 0
-        )
+        self.frame_buffer.text(f"Battery: {battery.get_percentage()}%", 20, 180, 0)
 
         self.update()
 

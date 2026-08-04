@@ -1,6 +1,7 @@
 from utime import sleep_ms
-from lib.core.event_bus import event_bus, Events
 from lib.managers.hardware import Hardware, Buttons
+from lib.core.event_bus import event_bus
+from lib.core.types import Events
 
 
 class ButtonManager:
