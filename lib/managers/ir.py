@@ -79,8 +79,7 @@ class IRReciever:
 
     def log_received_ir(self, data, address, *control) -> None:
         """Callback function to handle received IR data, printing it and storing it in the last_commands list."""
-        # print(f"Address: {address:#04x}, Command: {data:#04x}, Control: {control}")
-        # print("---")
+        print(data, "<<<<<<")
         if address is not None:
             ticks = ticks_ms()
             self._received_index += 1

@@ -13,10 +13,12 @@ class EPaperDisplay(EPD):
         self._timeout_interval = 20  # ms
 
         self.menu = device.get_names()
-        self.selected = 0
+        self.selected = device.get_index()
 
         self._event_bus = event_bus
         self._event_bus.subscribe(Events.BUTTON_PRESSED, self.on_button_press)
+
+        self.draw_menu()
 
     def draw_menu(self, voltage=0.0) -> None:
         """Draws the main menu on the e-paper display, highlighting the selected item and showing battery voltage."""
@@ -35,16 +37,13 @@ class EPaperDisplay(EPD):
             self.frame_buffer.text(text, 20, y, 0)
             y += 25
 
-        self.frame_buffer.text(f"Battery: {battery.get_percentage()}%", 20, 180, 0)
+        self.frame_buffer.text(f"Protocol: {device.get().protocol}", 20, 170, 0)
+        self.frame_buffer.text(f"Battery: {battery.get_percentage()}%", 20, 190, 0)
 
         self.update()
 
     def on_button_press(self, button_name, *args, **kwargs) -> None:
         """Handles button press events to navigate the menu."""
         if button_name == Buttons.MENU_SELECT:
-            self.selected += 1
-
-            if self.selected >= len(self.menu):
-                self.selected = 0
-
+            self.selected = device.get_index()
             self.draw_menu()
