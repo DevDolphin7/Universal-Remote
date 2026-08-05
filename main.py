@@ -2,7 +2,6 @@ import network
 from utime import sleep_ms
 from lib.managers.battery import battery
 from lib.managers.buttons import ButtonManager
-from lib.managers.device import device
 from lib.managers.epd import EPaperDisplay
 from lib.managers.ir import IRManager
 

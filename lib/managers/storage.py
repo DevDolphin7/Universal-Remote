@@ -7,7 +7,7 @@ class Storage:
         self.filename = filename
         self.devices = []
 
-    def save(self, devices: list[Device]) -> None:
+    def save_devices(self, devices: list[Device]) -> None:
         with open(self.filename, "w") as f:
             json.dump([device.to_dict() for device in devices], f)
 

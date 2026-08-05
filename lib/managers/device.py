@@ -43,6 +43,9 @@ class DeviceManager:
     def get(self) -> Device:
         return self.devices[self._index]
 
+    def get_index(self) -> int:
+        return self._index
+
     def get_from_index(self, index) -> Device:
         return self.devices[index]
 
@@ -56,28 +59,30 @@ class DeviceManager:
 
     def update_and_save(self, updated_device: Device) -> Device:
         self.devices[self._index] = updated_device
-        self._storage.save(self.devices)
+        self._storage.save_devices(self.devices)
         return self.devices[self._index]
 
     def add_remote(self):
         self.learn_mode = True
 
-    def learn_button(self, datas: list[IRData]):
-        if self.learn_mode and len(datas) > 1:
-            device = self.get()
-            latest_data = datas[1]
-            prior_data = datas[0]
+    def learn_button(self, ir_signals: list[IRData]):
+        if not self.learn_mode or not len(ir_signals) > 1:
+            return
 
-            if latest_data.ticks_diff < 200:
-                device.update(latest_data)
-                device.set_press_command(prior_data.command)
-                device.set_release_command(latest_data.command)
-            else:
-                device.update(latest_data)
-                device.set_press_command(latest_data.command)
+        device = self.get()
+        last_signal = ir_signals[1]
+        prior_signal = ir_signals[0]
 
-            self.update_and_save(device)
-            self._event_bus.publish(Events.BUTTON_LEARNED)
+        device.update(last_signal)
+
+        if last_signal.ticks_diff < 200:
+            device.set_press_command(prior_signal.command)
+            device.set_release_command(last_signal.command)
+        else:
+            device.set_press_command(last_signal.command)
+
+        self.update_and_save(device)
+        self._event_bus.publish(Events.BUTTON_LEARNED)
 
     def stop_learning(self, *args, **kwargs):
         print("Learned a button")
