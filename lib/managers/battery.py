@@ -24,6 +24,8 @@ class BatteryManager:
         self._event_bus = event_bus
         self._event_bus.subscribe(Events.BUTTON_RELEASED, self._on_activity)
 
+        self.update()
+
     def _on_activity(self, *args, **kwargs) -> None:
         """Handles activity events to update the battery status."""
         self._last_activity = ticks_ms()
