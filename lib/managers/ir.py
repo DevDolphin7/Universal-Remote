@@ -58,4 +58,3 @@ class IRManager:
 
     def set_up_from_device(self, device: Device) -> None:
         self.change_protocol()
-        print(self._protocol.get_rx_name())
