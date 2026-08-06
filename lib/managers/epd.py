@@ -21,6 +21,7 @@ class EPaperDisplay(EPD):
         self._event_bus.subscribe(Events.LOW_BATTERY, self._on_low_battery)
 
         self.draw.menu(self.menu, device.get_index())
+        self.update()
 
     def _on_button_press(self, button_name, *args, **kwargs) -> None:
         """Handles button press events to navigate the menu."""
@@ -53,8 +54,8 @@ class Draw:
     def menu(self, menu, selected) -> None:
         """Draws the main menu on the e-paper display, highlighting the selected item and showing battery voltage."""
         self.frame_buffer.fill(1)
-        self.frame_buffer.text("Main Menu", 50, 10, 0)
-        self.frame_buffer.hline(45, 20, 80, 0)
+        self.frame_buffer.text("Remotes", 50, 10, 0)
+        self.frame_buffer.hline(45, 20, 65, 0)
 
         y = 50
 
