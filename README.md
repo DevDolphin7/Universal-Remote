@@ -313,6 +313,7 @@ Feature files remain the authoritative definition of behaviour.
 ## Power Management
 
 - 2 x AA batteries
+- [Sprung negative and positive AA battery contacts](https://www.amazon.co.uk/Contacts-Negative-Positive-Conversion-Electronic-silver/dp/B0G5MYJQB9/ref=sr_1_4)
 - 2 x 1 MΩ resistor (Voltage divider for Pico 2W, potentially not required for Pico 2)
 - 100 nF ceramic capacitor (Voltage divider for Pico 2W, potentially not required for Pico 2)
 
