@@ -123,6 +123,8 @@ Whilst in learning mode:
 
 This workflow is intended to make updating a single button as quick as possible.
 
+If no valid IR signal is received and no button is pressed within 30 seconds, learning is cancelled and the previous configuration is retained.
+
 ---
 
 ## Learning Press and Release Commands
@@ -137,7 +139,7 @@ If two commands are received within 200 milliseconds:
 - First command becomes the press command.
 - Second command becomes the release command.
 
-If only a single command is received within 200 millisecond:
+If only a single command is received within 200 milliseconds:
 
 - The command becomes the press command.
 - No release command is stored.
@@ -147,6 +149,8 @@ When transmitting:
 - Press transmits the press command.
 - Release transmits the release command if one exists.
 - Press and hold transmits the press command every 160 milliseconds.
+
+Some protocols transmit repeated commands every 160 milliseconds. Care should be taken by the user to ensure repeat commands sent from an accidental button hold during learn mode are not stored as the release command. The screen reports what was learned for the and press and release command.
 
 ---
 
@@ -220,7 +224,6 @@ for ten seconds, while in Normal Mode.
 The factory reset process:
 
 - Removes all learned remotes.
-- Restores default data.
 - Returns the remote to its initial state.
 
 ---
@@ -256,7 +259,7 @@ Button interactions should feel instantaneous to the user.
 
 ## Battery Life
 
-The remote must achieve a minimum battery life of 6 monthd using two AA batteries under normal usage.
+The remote must achieve a minimum battery life of 6 months using two AA batteries under normal usage.
 
 > Quiescent drain must not be higher than 0.5 mA in the dormant state.
 
