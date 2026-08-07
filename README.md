@@ -250,49 +250,43 @@ These feature files will act as the primary source of behavioural requirements.
 
 Button interactions should feel instantaneous to the user.
 
-Target:
-
-- Button press to IR transmission under 100 ms.
+> Button press to IR transmission under 100 ms.
 
 ---
 
 ## Battery Life
 
 The remote must achieve a minimum battery life of 6 monthd using two AA batteries under normal usage.
+
 > Quiescent drain must not be higher than 0.5 mA in the dormant state.
 
 The remote should achieve a minimum battery life of two years using two AA batteries under normal usage.
+
 > Quiescent drain should not be higher than 0.1 mA in the dormant state.
 
 ---
 
 ## Persistent Storage
 
-Remote definitions must survive:
-
-- Power loss.
-- Battery replacement.
-- Device restart.
+> Remote definitions must survive power loss, device restart and battery replacement
 
 ---
 
 ## Simplicity
 
-Common user operations should require the minimum practical number of interactions.
-
-Particular emphasis should be placed on making button learning fast and intuitive.
+> Common user operations should require the minimum practical number of interactions.
 
 ---
 
 ## Recovery
 
-Users must always have a method of recovering from accidental configuration or corrupted data.
+> Users must always have a method of recovering from accidental configuration or corrupted data.
 
 ---
 
 ## Storage Integrity
 
-The device should be capable of recovering to a functional default state.
+> The device should be capable of recovering to a functional default state.
 
 ---
 
@@ -307,5 +301,22 @@ Feature files remain the authoritative definition of behaviour.
 ---
 
 # Hardware
+
+## Core Electronics
+
 - [Raspberry Pi Pico 2W](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
 - [Wave share 200x200, 1.54inch E-Ink display module, SKU 12955](https://www.waveshare.com/1.54inch-e-paper-module.htm)
+- [Infrared Transmitter - HX-53 IR Tx Breakout Board](https://www.amazon.co.uk/Digital-Receiver-Transmitter-Sensor-Arduino/dp/B0CQLX2VNQ/ref=sr_1_10)
+- [Infrared Receiver - HX-M121 IR Rx Breakout Board](https://www.amazon.co.uk/Digital-Receiver-Transmitter-Sensor-Arduino/dp/B0CQLX2VNQ/ref=sr_1_10)
+- [10 x tactile push button switches]
+
+## Power Management
+
+- 2 x AA batteries
+- 2 x 1 MΩ resistor (Voltage divider for Pico 2W, potentially not required for Pico 2)
+- 100 nF ceramic capacitor (Voltage divider for Pico 2W, potentially not required for Pico 2)
+
+## Custom
+
+- Custom PCB - .kicad_pcb files included
+- 3D printed enclosure - .stl files included
