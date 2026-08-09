@@ -239,9 +239,8 @@ The system behaviour will be defined through the following feature files:
 5. Exit Learning Mode
 6. Learn Button
 7. Change Receive Protocol
-8. Add New Remote
-9. Persist Learned Remotes
-10. Factory Reset
+8. Persist Learned Remotes
+9. Factory Reset
 
 These feature files will act as the primary source of behavioural requirements.
 
