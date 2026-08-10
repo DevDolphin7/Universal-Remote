@@ -228,9 +228,9 @@ The factory reset process:
 
 ---
 
-# Planned Feature Files
+# Feature Files
 
-The system behaviour will be defined through the following feature files:
+The system behaviour is defined through the following feature files:
 
 1. Use Remote
 2. Select Active Remote
@@ -242,7 +242,7 @@ The system behaviour will be defined through the following feature files:
 8. Persist Learned Remotes
 9. Factory Reset
 
-These feature files will act as the primary source of behavioural requirements.
+These feature files act as the primary source of behavioural requirements.
 
 ---
 
