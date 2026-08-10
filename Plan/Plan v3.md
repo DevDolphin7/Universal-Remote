@@ -50,26 +50,36 @@
 
 Drivers > Core > Storage > Managers > main
 
-## Testing
+## TDD
 
-| Folder | File | TDD Required | Comment |
-|----------|----------|----------|----------|
-| drivers | /ir_rx | No | Implemented elsewhere |
-| drivers | /ir_tx | No | Implemented elsewhere |
-| drivers | hardware.py | No | Hardware pin configuration only |
-| drivers | epd.py | No | Primarily visual display rendering |
-| drivers | epdin54_v2.py | No | Third-party hardware driver |
-| drivers | battery_manager.py | No | Simple voltage conversion logic |
-| drivers | ir_receiver.py | No | Thin wrapper around IR library |
-| drivers | ir_transmitter.py | No | Thin wrapper around IR library |
-| drivers | protocol_registry.py | No | Static protocol lookup data |
-| core | event_bus.py | Yes | Critical publish/subscribe behaviour |
-| core | config.py | No | Constants and configuration only |
-| core | types.py | No | Data structure definitions only |
-| storage | storage.py | Yes | Persistence and restore behaviour |
-| storage | remotes.json | No | Data file only |
-| managers | device_manager.py | Yes | Mode transitions and reset rules |
-| managers | button_manager.py | Yes | Button timing and state logic |
-| managers | learn_manager.py | Yes | Complex learning workflow |
-| managers | remote_manager.py | Yes | Remote selection and command rules |
-| root | main.py | No | Application composition and startup |
+| Folder   | File                 | TDD Required | Comment                                                                                      |
+| -------- | -------------------- | ------------ | -------------------------------------------------------------------------------------------- |
+| drivers  | /ir_rx               | No           | Implemented by [peterhinch](https://github.com/peterhinch/micropython_ir)                    |
+| drivers  | /ir_tx               | No           | Implemented by [peterhinch](https://github.com/peterhinch/micropython_ir)                    |
+| drivers  | hardware.py          | No           | Hardware pin configuration only                                                              |
+| drivers  | epd.py               | No           | Primarily visual display rendering                                                           |
+| drivers  | epdin54_v2.py        | No           | Implemented by [joshnuss](https://gist.github.com/joshnuss/9ebc092d1c21b9dbc68e9d3020848146) |
+| drivers  | battery_manager.py   | No           | Simple voltage conversion logic                                                              |
+| drivers  | ir_receiver.py       | No           | Thin wrapper around IR library                                                               |
+| drivers  | ir_transmitter.py    | No           | Thin wrapper around IR library                                                               |
+| drivers  | protocol_registry.py | No           | Static protocol lookup data                                                                  |
+| core     | event_bus.py         | Yes          | Critical publish/subscribe behaviour                                                         |
+| core     | config.py            | No           | Constants and configuration only                                                             |
+| core     | types.py             | No           | Data structure definitions only                                                              |
+| storage  | storage.py           | Yes          | Persistence and restore behaviour                                                            |
+| storage  | remotes.json         | No           | Data file only                                                                               |
+| managers | device_manager.py    | Yes          | Mode transitions and reset rules                                                             |
+| managers | button_manager.py    | Yes          | Button timing and state logic                                                                |
+| managers | learn_manager.py     | Yes          | Complex learning workflow                                                                    |
+| managers | remote_manager.py    | Yes          | Remote selection and command rules                                                           |
+| root     | main.py              | No           | Application composition and startup                                                          |
+
+## System Tests
+
+- Button press to IR transmission under 100 ms.
+- Quiescent drain must not be higher than 0.5 mA in the dormant state.
+- Quiescent drain should not be higher than 0.1 mA in the dormant state.
+- Remote definitions must survive battery replacement.
+- Common user operations should require 1 press.
+- Users must always have a method of recovering from accidental configuration or corrupted data.
+- The device should be capable of recovering to a functional default state.
