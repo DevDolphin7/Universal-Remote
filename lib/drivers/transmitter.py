@@ -1,15 +1,17 @@
 from time import sleep_ms
-from lib.managers.ir_protocol import IRProtocol
+from lib.core.protocol_registry import IRProtocol
 
 
-class IRTransmitter:
-    def __init__(self, address: int, protocol: IRProtocol) -> None:
+class Transmitter:
+    def __init__(self, protocol: IRProtocol) -> None:
         """Initializes the IR transmitter with a given address and protocol."""
-        self._address = address
         self._previous = 1
         self._timeout = 500  # ms
         self._timeout_interval = 20  # ms
 
+        self.set_protocol(protocol)
+
+    def set_protocol(self, protocol: IRProtocol) -> None:
         self._protocol = protocol
         self._protocol.set_tx()
 
@@ -24,7 +26,3 @@ class IRTransmitter:
 
             if time_elapsed > self._timeout:
                 raise TimeoutError("Transmission timeout")
-
-    def send_hex_command(self, command: int) -> None:
-        """Sends a hexadecimal IR command"""
-        self.transmit_and_wait(self._address, command)

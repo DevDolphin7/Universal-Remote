@@ -1,29 +1,31 @@
 from time import ticks_ms, ticks_diff
-from lib.managers.ir_protocol import IRProtocol
-from lib.core.event_bus import event_bus
+from lib.core.protocol_registry import IRProtocol
 from lib.core.types import Events, IRData
 
 
-class IRReciever:
+class Reciever:
     def __init__(self, protocol: IRProtocol) -> None:
         """Initializes the IR receiver with a given protocol and sets up the callback for received data."""
         self.last_commands = []
 
-        self._protocol = protocol
         self._received_index = 0
         self._recieved_ticks = 0
         self._last_receievd_ticks = 0
 
-        self._event_bus = event_bus
+        self.set_protocol(protocol)
 
-        self.start()
+    def set_protocol(self, protocol: IRProtocol) -> None:
+        try:
+            self.close()
+        finally:
+            self._protocol = protocol
+            self.start()
 
     def start(self) -> None:
         self._protocol.set_rx(self.log_received_ir)
 
     def log_received_ir(self, data, address, *control) -> None:
         """Callback function to handle received IR data, printing it and storing it in the last_commands list."""
-        print(data, "<<<<<<")
         if address is not None:
             ticks = ticks_ms()
             self._received_index += 1
@@ -54,8 +56,6 @@ class IRReciever:
 
             if self._received_index > 255:
                 self._received_index = 0
-
-            self._event_bus.publish(Events.IR_RECEIVED, self.last_commands)
 
     def close(self) -> None:
         """Closes the IR receiver."""

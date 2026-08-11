@@ -1,9 +1,8 @@
 from framebuf import FrameBuffer
 from lib.drivers.epd1in54_V2 import EPD
 from lib.core.event_bus import event_bus
-from lib.managers.hardware import Buttons
-from lib.managers.battery import battery
-from lib.managers.device import device
+from lib.drivers.hardware import Buttons
+from lib.managers.device_manager import device
 from lib.core.types import Events
 
 
@@ -29,7 +28,7 @@ class EPaperDisplay(EPD):
             self.draw.menu(self.menu, device.get_index())
             self.draw.useful_info()
             self.draw.battery(self._battery_x_y[0], self._battery_x_y[1])
-            if not battery.is_low():
+            if not False:  # battery.is_low():
                 self.draw.battery_charge(
                     self._battery_x_y[0] + 1, self._battery_x_y[1] + 2
                 )

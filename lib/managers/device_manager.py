@@ -1,5 +1,5 @@
-from lib.managers.storage import Storage
-from lib.managers.hardware import Buttons
+from lib.storage.storage import Storage
+from lib.drivers.hardware import Buttons
 from lib.core.event_bus import event_bus
 from lib.core.types import Device, Events, IRData
 

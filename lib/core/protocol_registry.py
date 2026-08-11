@@ -10,7 +10,7 @@ from lib.drivers.ir_tx.sony import (
     SONY_20 as SONY_20_TX,
 )
 from lib.drivers.ir_tx.mce import MCE_TX
-from lib.managers.hardware import Hardware
+from lib.drivers.hardware import Hardware
 
 
 class RxProtocol:
