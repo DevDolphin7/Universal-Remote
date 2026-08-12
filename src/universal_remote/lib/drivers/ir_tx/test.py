@@ -19,9 +19,9 @@ from primitives.switch import Switch
 from primitives.delay_ms import Delay_ms
 
 # Import all implemented classes
-from lib.drivers.ir_tx.nec import NEC
-from lib.drivers.ir_tx.sony import SONY_12, SONY_15, SONY_20
-from lib.drivers.ir_tx.philips import RC5, RC6_M0
+from universal_remote.lib.drivers.ir_tx.nec import NEC
+from universal_remote.lib.drivers.ir_tx.sony import SONY_12, SONY_15, SONY_20
+from universal_remote.lib.drivers.ir_tx.philips import RC5, RC6_M0
 
 loop = asyncio.get_event_loop()
 

@@ -1,4 +1,4 @@
-from lib.drivers.hardware import Hardware
+from universal_remote.lib.drivers.hardware import Hardware
 
 
 class Battery:

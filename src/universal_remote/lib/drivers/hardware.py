@@ -1,5 +1,5 @@
 from machine import Pin, ADC
-import lib.core.config as config
+import universal_remote.lib.core.config as config
 
 
 class Hardware:

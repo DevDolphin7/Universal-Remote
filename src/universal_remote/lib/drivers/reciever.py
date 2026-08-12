@@ -1,5 +1,5 @@
 from time import ticks_ms, ticks_diff
-from lib.core.types import IRData
+from universal_remote.lib.core.types import IRData
 
 
 class Reciever:

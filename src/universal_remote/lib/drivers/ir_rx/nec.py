@@ -8,7 +8,7 @@
 # Copyright Peter Hinch 2020-2022 Released under the MIT license
 
 from utime import ticks_us, ticks_diff
-from lib.drivers.ir_rx import IR_RX
+from universal_remote.lib.drivers.ir_rx import IR_RX
 
 
 class NEC_ABC(IR_RX):

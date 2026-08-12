@@ -1,0 +1,21 @@
+[project]
+name = "universal-remote"
+version = "0.2.0"
+description = "Universal Remote is a handheld programmable infrared (IR) remote built using a Raspberry Pi Pico 2W, e-paper display, an IR Rx and Tx breakout board, buttons and 2 x AA batteries."
+authors = [
+    {name = "DevDolphin7",email = "devdolphin7@outlook.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+]
+
+[tool.poetry]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.1.1"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,5 +1,5 @@
 from time import sleep_ms
-from lib.core.protocol_registry import IRProtocol
+from universal_remote.lib.core.protocol_registry import IRProtocol
 
 
 class Transmitter:

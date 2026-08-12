@@ -5,7 +5,7 @@
 # Copyright Peter Hinch 2020 Released under the MIT license
 
 from micropython import const
-from lib.drivers.ir_tx import IR
+from universal_remote.lib.drivers.ir_tx import IR
 
 # Philips RC5 protocol
 _T_RC5 = const(889)  # Time for pulse of carrier

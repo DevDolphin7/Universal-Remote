@@ -6,7 +6,7 @@
 
 # With thanks to J.E. Tannenbaum for information re Samsung protocol
 from micropython import const
-from lib.drivers.ir_tx import IR, STOP
+from universal_remote.lib.drivers.ir_tx import IR, STOP
 
 _TBURST = const(563)
 _T_ONE = const(1687)
