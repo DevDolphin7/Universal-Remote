@@ -1,10 +1,9 @@
 from time import ticks_ms, ticks_diff
-from lib.core.protocol_registry import IRProtocol
-from lib.core.types import Events, IRData
+from lib.core.types import IRData
 
 
 class Reciever:
-    def __init__(self, protocol: IRProtocol) -> None:
+    def __init__(self, protocol) -> None:
         """Initializes the IR receiver with a given protocol and sets up the callback for received data."""
         self.last_commands = []
 
@@ -14,7 +13,7 @@ class Reciever:
 
         self.set_protocol(protocol)
 
-    def set_protocol(self, protocol: IRProtocol) -> None:
+    def set_protocol(self, protocol) -> None:
         try:
             self.close()
         finally:

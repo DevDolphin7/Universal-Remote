@@ -1,7 +1,4 @@
-from time import ticks_ms, ticks_diff
 from lib.drivers.hardware import Hardware
-from lib.core.event_bus import event_bus
-from lib.core.types import Events, PowerState
 
 
 class Battery:
@@ -36,5 +33,4 @@ class Battery:
 
     def is_low(self) -> bool:
         """Checks if the battery percentage is below a specified threshold."""
-
         return self.voltage < self.voltage_threshold

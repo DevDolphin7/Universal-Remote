@@ -15,16 +15,23 @@ class Hardware:
     ir_rx = Pin(config.GPIO_IR_RX, Pin.IN)
     ir_tx = Pin(config.GPIO_IR_TX, Pin.IN)
 
-    menu_select_button = Pin(config.GPIO_MENU_SELECT_BUTTON, Pin.IN, Pin.PULL_UP)
-    change_ir_protocol_button = Pin(
-        config.GPIO_CHANGE_IR_PROTOCOL_BUTTON, Pin.IN, Pin.PULL_UP
-    )
-    transmit_ir_button = Pin(config.GPIO_TRANSMIT_IR_BUTTON, Pin.IN, Pin.PULL_UP)
-    learn_ir_button = Pin(config.GPIO_LEARN_IR_BUTTON, Pin.IN, Pin.PULL_UP)
+    mode = Pin(config.GPIO_MODE, Pin.IN, Pin.PULL_UP)
+    nav_up = Pin(config.GPIO_NAV_UP, Pin.IN, Pin.PULL_UP)
+    nav_down = Pin(config.GPIO_NAV_DOWN, Pin.IN, Pin.PULL_UP)
+    nav_ok = Pin(config.GPIO_NAV_OK, Pin.IN, Pin.PULL_UP)
 
 
 class Buttons:
-    MENU_SELECT = config.MENU_SELECT_BUTTON
-    CHANGE_IR_PROTOCOL = config.CHANGE_IR_PROTOCOL_BUTTON
-    TRANSMIT_IR = config.TRANSMIT_IR_BUTTON
-    LEARN_IR = config.LEARN_IR_BUTTON
+    MODE = config.MODE
+
+    NAV_UP = config.NAV_UP
+    NAV_DOWN = config.NAV_DOWN
+    NAV_LEFT = config.NAV_LEFT
+    NAV_RIGHT = config.NAV_RIGHT
+    NAV_OK = config.NAV_OK
+
+    VOL_UP = config.VOL_UP
+    VOL_DOWN = config.VOL_DOWN
+
+    CH_UP = config.CH_UP
+    CH_DOWN = config.CH_DOWN
