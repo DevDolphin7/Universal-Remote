@@ -11,16 +11,28 @@ GPIO_IR_RX = 10
 GPIO_IR_TX = 11
 
 # Button GPIO Pin Numbers
-GPIO_CHANGE_IR_PROTOCOL_BUTTON = 9
-GPIO_TRANSMIT_IR_BUTTON = 14
-GPIO_MENU_SELECT_BUTTON = 15
-GPIO_LEARN_IR_BUTTON = 8
+GPIO_MODE = 9
+GPIO_NAV_UP = 14
+GPIO_NAV_DOWN = 15
+GPIO_NAV_LEFT = 0
+GPIO_NAV_RIGHT = 0
+GPIO_NAV_OK = 8
+GPIO_VOL_UP = 0
+GPIO_VOL_DOWN = 0
+GPIO_CH_UP = 0
+GPIO_CH_DOWN = 0
 
 # Battery GPIO Pin Numbers
 VOLTAGE_DIVIDER_PIN = 26
 
 # Buttons
-MENU_SELECT_BUTTON = "menu_select"
-CHANGE_IR_PROTOCOL_BUTTON = "change_ir_protocol"
-TRANSMIT_IR_BUTTON = "transmit_ir"
-LEARN_IR_BUTTON = "learn_ir"
+MODE = "mode"
+NAV_UP = "nav-up"
+NAV_DOWN = "nav_down"
+NAV_LEFT = "nav_left"
+NAV_RIGHT = "nav_right"
+NAV_OK = "nav_ok"
+VOL_UP = "vol_up"
+VOL_DOWN = "vol_up"
+CH_UP = "ch_up"
+CH_DOWN = "ch_down"
