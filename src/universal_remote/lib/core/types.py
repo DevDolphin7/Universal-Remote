@@ -4,13 +4,11 @@ class IRData:
         address: int,
         command: int,
         protocol_name: str,
-        index: int,
         ticks_diff: int,
     ):
         self.address = address
         self.command = command
         self.protocol = protocol_name
-        self.index = index
         self.ticks_diff = ticks_diff
 
 
@@ -50,6 +48,22 @@ class Device:
 
     def set_release_command(self, command: int):
         self.button1_release_command = command
+
+
+class Buttons:
+    MODE = "MODE"
+
+    NAV_UP = "NAV_UP"
+    NAV_DOWN = "NAV_DOWN"
+    NAV_LEFT = "NAV_LEFT"
+    NAV_RIGHT = "NAV_RIGHT"
+    NAV_OK = "NAV_OK"
+
+    VOL_UP = "VOL_UP"
+    VOL_DOWN = "VOL_DOWN"
+
+    CH_UP = "CH_UP"
+    CH_DOWN = "CH_DOWN"
 
 
 class Events:
