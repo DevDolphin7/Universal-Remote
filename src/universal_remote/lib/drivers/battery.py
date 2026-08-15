@@ -1,7 +1,7 @@
 from universal_remote.lib.drivers.hardware import Hardware
 
 
-class Battery:
+class BatteryInterface:
     def __init__(self) -> None:
         """Initializes the Battery with default voltage values and hardware settings."""
         self.full_voltage = 4.2
@@ -29,7 +29,9 @@ class Battery:
         for _ in range(self._sample_size):
             total += self.read_voltage()
 
-        return round(total / self._sample_size, 2)
+        self.voltage = round(total / self._sample_size, 2)
+
+        return self.voltage
 
     def is_low(self) -> bool:
         """Checks if the battery percentage is below a specified threshold."""

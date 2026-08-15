@@ -41,7 +41,7 @@ class TxProtocol:
         self.protocol = protocol
 
 
-class IRProtocol:
+class IRProtocolInterface:
     def __init__(self, start_index: int = 0) -> None:
         """Initializes the IRProtocol with a starting index and sets up the available RX and TX protocols."""
         self.index: int = start_index

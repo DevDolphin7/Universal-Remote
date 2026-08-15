@@ -1,9 +1,9 @@
 from time import sleep_ms
-from lib.drivers.protocol_registry import IRProtocol
+from lib.drivers.protocol_registry import IRProtocolInterface
 
 
 class Transmitter:
-    def __init__(self, protocol: IRProtocol) -> None:
+    def __init__(self, protocol: IRProtocolInterface) -> None:
         """Initializes the IR transmitter with a given address and protocol."""
         self._previous = 1
         self._timeout = 500  # ms
@@ -11,7 +11,7 @@ class Transmitter:
 
         self.set_protocol(protocol)
 
-    def set_protocol(self, protocol: IRProtocol) -> None:
+    def set_protocol(self, protocol: IRProtocolInterface) -> None:
         self._protocol = protocol
         self._protocol.set_tx()
 
