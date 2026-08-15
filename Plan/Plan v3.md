@@ -59,31 +59,31 @@ Drivers > Core > Storage > Display > Managers > main
 
 ### TDD
 
-| Folder   | File                 | TDD Required | Comment                                                                                                                        |
-| -------- | -------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| drivers  | /ir_rx               | No           | Module implemented by [peterhinch](https://github.com/peterhinch/micropython_ir)                                               |
-| drivers  | /ir_tx               | No           | Module implemented by [peterhinch](https://github.com/peterhinch/micropython_ir)                                               |
-| drivers  | hardware.py          | No           | Hardware pin configuration only                                                                                                |
-| drivers  | epdin54_v2.py        | No           | Low-level display hardware driver implemented by [joshnuss](https://gist.github.com/joshnuss/9ebc092d1c21b9dbc68e9d3020848146) |
-| drivers  | battery.py           | No           | Direct ADC hardware access only                                                                                                |
-| drivers  | ir_receiver.py       | No           | Thin wrapper around IR library                                                                                                 |
-| drivers  | ir_transmitter.py    | No           | Thin wrapper around IR library                                                                                                 |
-| core     | event_bus.py         | Yes          | Critical publish/subscribe behaviour                                                                                           |
-| core     | state.py             | Yes          | Shared state and operating mode rules                                                                                          |
-| core     | protocol_registry.py | Yes          | Protocol lookup and mapping behaviour                                                                                          |
-| core     | config.py            | No           | Constants and configuration only                                                                                               |
-| core     | types.py             | No           | Data structure definitions only                                                                                                |
-| storage  | storage.py           | Yes          | Persistence and restore behaviour                                                                                              |
-| storage  | remotes.json         | No           | Data file only                                                                                                                 |
-| display  | screen_builder.py    | Yes          | Framebuffer generation and presentation logic                                                                                  |
-| display  | battery_icon.py      | Yes          | Battery state to icon conversion                                                                                               |
-| managers | display_manager.py   | Yes          | Display refresh and screen selection behaviour                                                                                 |
-| managers | device_manager.py    | Yes          | Mode transitions and reset rules                                                                                               |
-| managers | button_manager.py    | Yes          | Button timing and state logic                                                                                                  |
-| managers | learn_manager.py     | Yes          | Complex learning workflow and protocol selection                                                                               |
-| managers | remote_manager.py    | Yes          | Remote selection and command rules                                                                                             |
-| managers | power_manager.py     | Yes          | Battery voltage to power state rules                                                                                           |
-| root     | main.py              | No           | Application composition and startup, tested through [System Tests](#system-tests)                                              |
+| Folder   | File                 | TDD Required | Comment                                                                                                                         |
+| -------- | -------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------  |
+| drivers  | /ir_rx               | No           | Module implemented by [peterhinch](https://github.com/peterhinch/micropython_ir)                                                |
+| drivers  | /ir_tx               | No           | Module implemented by [peterhinch](https://github.com/peterhinch/micropython_ir)                                                |
+| drivers  | hardware.py          | No           | Hardware pin configuration only                                                                                                 |
+| drivers  | epdin54_v2.py        | No           | Low-level display hardware driver implemented by [joshnuss](https://gist.github.com/joshnuss/9ebc092d1c21b9dbc68e9d3020848146)  |
+| drivers  | battery.py           | No           | Direct ADC hardware access only                                                                                                 |
+| drivers  | ir_receiver.py       | No           | Thin wrapper around IR library                                                                                                  |
+| drivers  | ir_transmitter.py    | No           | Thin wrapper around IR library                                                                                                  |
+| drivers  | protocol_registry.py | No           | Protocol lookup and mapping behaviour - Strategy [Design Pattern](https://en.wikipedia.org/wiki/Design_Patterns) implementation |
+| core     | event_bus.py         | Yes          | Critical publish/subscribe behaviour                                                                                            |
+| core     | state.py             | Yes          | Shared state and operating mode rules                                                                                           |
+| core     | config.py            | No           | Constants and configuration only                                                                                                |
+| core     | types.py             | No           | Data structure definitions only                                                                                                 |
+| storage  | storage.py           | Yes          | Persistence and restore behaviour                                                                                               |
+| storage  | remotes.json         | No           | Data file only                                                                                                                  |
+| display  | screen_builder.py    | Yes          | Framebuffer generation and presentation logic                                                                                   |
+| display  | battery_icon.py      | Yes          | Battery state to icon conversion                                                                                                |
+| managers | display_manager.py   | Yes          | Display refresh and screen selection behaviour                                                                                  |
+| managers | device_manager.py    | Yes          | Mode transitions and reset rules                                                                                                |
+| managers | button_manager.py    | Yes          | Button timing and state logic                                                                                                   |
+| managers | learn_manager.py     | Yes          | Complex learning workflow and protocol selection                                                                                |
+| managers | remote_manager.py    | Yes          | Remote selection and command rules                                                                                              |
+| managers | power_manager.py     | Yes          | Battery voltage to power state rules                                                                                            |
+| root     | main.py              | No           | Application composition and startup, tested through [System Tests](#system-tests)                                               |
 
 ### System Tests
 
