@@ -1,18 +1,22 @@
 [
     {
+        "id": 1,
         "device_name": "TV Remote",
         "protocol": "NEC",
-        "id": 1,
         "address": 0,
-        "button1_press_command": 0,
-        "button1_release_command": 0
+        "commands": {
+            "press": 4,
+            "release": 0
+        }
     },
     {
+        "id": 2,
         "device_name": "TV Remote 2",
         "protocol": "NEC",
-        "id": 2,
         "address": 0,
-        "button1_press_command": 0,
-        "button1_release_command": 0
+        "commands": {
+            "press": 4,
+            "release": "None"
+        }
     }
 ]
