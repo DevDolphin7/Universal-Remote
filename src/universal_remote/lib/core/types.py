@@ -1,58 +1,4 @@
-class IRData:
-    def __init__(
-        self,
-        address: int,
-        command: int,
-        protocol_name: str,
-        ticks_diff: int,
-    ):
-        self.address = address
-        self.command = command
-        self.protocol = protocol_name
-        self.ticks_diff = ticks_diff
-
-
-class Device:
-    def __init__(self, device):
-        self.device_name: str = device["device_name"]
-        self.protocol: str = device["protocol"]
-        self.id: int = device["id"]
-        self.address: int = device["address"]
-        self.button1_press_command: int = device["button1_press_command"]
-        # button2_press_command: int
-        # button3_press_command: int
-        # button4_press_command: int
-        # button5_press_command: int
-        self.button1_release_command: int = device["button1_release_command"]
-        # button2_release_command: int
-        # button3_release_command: int
-        # button4_release_command: int
-        # button5_release_command: int
-
-    def to_dict(self):
-        return {
-            "device_name": self.device_name,
-            "protocol": self.protocol,
-            "id": self.id,
-            "address": self.address,
-            "button1_press_command": self.button1_press_command,
-            "button1_release_command": self.button1_release_command,
-        }
-
-    def update(self, data: IRData):
-        self.protocol = data.protocol
-        self.address = data.address
-
-    def set_press_command(self, command: int):
-        self.button1_press_command = command
-
-    def set_release_command(self, command: int):
-        self.button1_release_command = command
-
-
-class Buttons:
-    MODE = "MODE"
-
+class ProgrammableButtons:
     NAV_UP = "NAV_UP"
     NAV_DOWN = "NAV_DOWN"
     NAV_LEFT = "NAV_LEFT"
@@ -64,6 +10,32 @@ class Buttons:
 
     CH_UP = "CH_UP"
     CH_DOWN = "CH_DOWN"
+
+
+class AllButtons(ProgrammableButtons):
+    MODE = "MODE"
+
+
+class Commands:
+    def __init__(self, press: int | None = None, release: int | None = None):
+        self.press = press
+        self.release = release
+
+
+class Device:
+    def __init__(
+        self,
+        id: int,
+        device_name: str,
+        protocol_name: str,
+        address: int,
+        commands: dict[ProgrammableButtons, Commands],
+    ):
+        self.id = id
+        self.device_name = device_name
+        self.protocol_name = protocol_name
+        self.address = address
+        self.commands = commands
 
 
 class Events:
@@ -78,6 +50,14 @@ class Events:
     SLEEP_IDLE = "SLEEP_IDLE"
     SLEEP_DEEP = "SLEEP_DEEP"
     WAKE = "WAKE"
+
+
+class IRData:
+    def __init__(self, address: int, command: int, protocol_name: str, ticks_diff: int):
+        self.address = address
+        self.command = command
+        self.protocol_name = protocol_name
+        self.ticks_diff = ticks_diff
 
 
 class PowerState:
