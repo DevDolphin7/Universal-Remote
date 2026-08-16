@@ -1,6 +1,6 @@
 from time import ticks_ms, ticks_diff
 from universal_remote.lib.core.types import IRData
-from lib.drivers.protocol_registry import IRProtocolInterface
+from universal_remote.lib.drivers.protocol_registry import IRProtocolInterface
 
 
 class Reciever:

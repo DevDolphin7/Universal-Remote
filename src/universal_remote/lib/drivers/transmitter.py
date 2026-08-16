@@ -1,5 +1,5 @@
 from time import sleep_ms
-from lib.drivers.protocol_registry import IRProtocolInterface
+from universal_remote.lib.drivers.protocol_registry import IRProtocolInterface
 
 
 class Transmitter:

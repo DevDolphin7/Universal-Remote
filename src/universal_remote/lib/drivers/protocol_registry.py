@@ -1,16 +1,16 @@
-from lib.drivers.ir_rx.nec import NEC_8, NEC_16, SAMSUNG
-from lib.drivers.ir_rx.philips import RC5_IR, RC6_M0
-from lib.drivers.ir_rx.sony import SONY_12, SONY_15, SONY_20
-from lib.drivers.ir_rx.mce import MCE
-from lib.drivers.ir_tx.nec import NEC as NEC_TX
-from lib.drivers.ir_tx.philips import RC5 as RC5_TX, RC6_M0_TX
-from lib.drivers.ir_tx.sony import (
+from universal_remote.lib.drivers.ir_rx.nec import NEC_8, NEC_16, SAMSUNG
+from universal_remote.lib.drivers.ir_rx.philips import RC5_IR, RC6_M0
+from universal_remote.lib.drivers.ir_rx.sony import SONY_12, SONY_15, SONY_20
+from universal_remote.lib.drivers.ir_rx.mce import MCE
+from universal_remote.lib.drivers.ir_tx.nec import NEC as NEC_TX
+from universal_remote.lib.drivers.ir_tx.philips import RC5 as RC5_TX, RC6_M0_TX
+from universal_remote.lib.drivers.ir_tx.sony import (
     SONY_12 as SONY_12_TX,
     SONY_15 as SONY_15_TX,
     SONY_20 as SONY_20_TX,
 )
-from lib.drivers.ir_tx.mce import MCE_TX
-from lib.drivers.hardware import Hardware
+from universal_remote.lib.drivers.ir_tx.mce import MCE_TX
+from universal_remote.lib.drivers.hardware import Hardware
 
 RxProtocolType = type[
     NEC_8 | NEC_16 | SAMSUNG | RC5_IR | RC6_M0 | SONY_12 | SONY_15 | SONY_20 | MCE
