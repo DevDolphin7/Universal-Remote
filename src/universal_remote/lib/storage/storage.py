@@ -30,7 +30,7 @@ class Storage:
 
         return state
 
-    def _validate_state(self, state):
+    def _validate_state(self, state) -> None:
         if state not in AppState.ALL:
             raise ValueError("Invalid state")
 
