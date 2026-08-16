@@ -64,3 +64,8 @@ class PowerState:
     ACTIVE = 0
     IDLE = 1
     DEEP_SLEEP = 2
+
+
+class AppState:
+    NORMAL = "NORMAL"
+    LEARNING = "LEARNING"
