@@ -26,13 +26,13 @@ class Device:
     def __init__(
         self,
         id: int,
-        device_name: str,
+        name: str,
         protocol_name: str,
         address: int,
-        commands: dict[ProgrammableButtons, Commands],
+        commands: dict[str, Commands], # str should be valid programmable buttons - micropython limitation
     ):
         self.id = id
-        self.device_name = device_name
+        self.name = name
         self.protocol_name = protocol_name
         self.address = address
         self.commands = commands
