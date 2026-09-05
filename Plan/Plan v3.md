@@ -75,8 +75,9 @@ Drivers > Core > Storage > Display > Managers > main
 | core     | types.py             | No           | Data structure definitions only                                                                                                 |
 | storage  | storage.py           | Yes          | Persistence and restore behaviour                                                                                               |
 | storage  | remotes.json         | No           | Data file only                                                                                                                  |
-| display  | screen_builder.py    | Yes          | Framebuffer generation and presentation logic                                                                                   |
-| display  | battery_icon.py      | Yes          | Battery state to icon conversion                                                                                                |
+| display  | screen_common.py     | No           | Add a footer to the bottom of the screen, light TDD through other display classes                                               |
+| display  | screen_learning.py   | Yes          | Light TDD to ensure button to be learned is visible                                                                             |
+| display  | screen_normal.py     | Yes          | Light TDD to ensure remotes are visible                                                                                         |
 | managers | display_manager.py   | Yes          | Display refresh and screen selection behaviour                                                                                  |
 | managers | device_manager.py    | Yes          | Mode transitions and reset rules                                                                                                |
 | managers | button_manager.py    | Yes          | Button timing and state logic                                                                                                   |
