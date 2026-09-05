@@ -20,10 +20,6 @@ class NormalScreen(AllScreens):
         """Updates the list of menu items (remotes) to be displayed on the screen."""
         self.menu_items = [item for item in items] + ["Add New"]
 
-    def set_protocol_name(self, protocol_name: str) -> None:
-        """Updates the protocol name to be displayed on the screen."""
-        self.protocol_name = protocol_name
-
     def build(self, selected_remote: int = 0, battery_charge: int = 0) -> None:
         self.build_menu(selected_remote)
         self.build_footer(battery_charge)
