@@ -1,0 +1,2 @@
+class LearningScreen:
+    pass
