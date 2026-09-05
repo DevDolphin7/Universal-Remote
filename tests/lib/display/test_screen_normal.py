@@ -1,12 +1,6 @@
 import pytest, re
 from universal_remote.lib.display.screen_normal import NormalScreen
 
-"""
-test_build_learning_screen_contains_the_button_to_be_learned
-test_build_learning_screen_contains_screen_dimensions
-test_build_learning_screen_always_contains_a_button_to_be_learned
-"""
-
 
 def assert_text_called_with_specific_text_once(frame_buffer, text: str):
     text_call_args = [call[0][0] for call in frame_buffer.text.call_args_list]
