@@ -1,0 +1,21 @@
+from universal_remote.lib.managers.display_manager import Display
+
+"""
+NormalScreen
+test_mode_button_released_cycles_active_remote
+test_state_change_to_learning_changes_to_learn_screen
+
+LearnScreen
+test_programmable_button_released_displays_that_button_as_learning
+test_ir_received_displays_button_learned_information
+test_ir_protocol_changed_
+test_state_change_to_normal_changes_to_normal_screen
+
+AllScreens
+test_battery_level_changed_event_updates_battery_icon
+test_low_battery_event_displays_empty_battery_icon
+"""
+
+
+class TestDisplay:
+    pass
