@@ -68,6 +68,18 @@ class IRData:
         self.ticks_diff = ticks_diff
 
 
+class IRProtocols:
+    NEC_8 = "NEC_8"
+    NEC_16 = "NEC_16"
+    SAMSUNG = "SAMSUNG"
+    RC5_IR = "RC5_IR"
+    RC6_M0 = "RC6_M0"
+    SONY_12 = "SONY_12"
+    SONY_15 = "SONY_15"
+    SONY_20 = "SONY_20"
+    MCE = "MCE"
+
+
 class PowerState:
     ACTIVE = 0
     IDLE = 1
@@ -77,5 +89,6 @@ class PowerState:
 class AppState:
     NORMAL = "NORMAL"
     LEARNING = "LEARNING"
+    LEARNED = "LEARNED"
 
-    ALL = (NORMAL, LEARNING)
+    ALL = (NORMAL, LEARNING, LEARNED)
