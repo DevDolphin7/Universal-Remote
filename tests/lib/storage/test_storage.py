@@ -151,13 +151,6 @@ class TestDevices:
                     if key == "id":
                         assert value != 777
 
-    """
-    test_load_devices_returns_saved_devices
-    test_load_devices_returns_empty_list_on_failure
-    test_load_devices_rejects_invalid_data
-    test_devices_saves_and_loads_through_persistent_memory
-    """
-
     class TestLoadDevices:
         def test_load_devices_returns_saved_devices(
             self, storage_saved_devices, devices
