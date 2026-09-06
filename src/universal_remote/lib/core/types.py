@@ -29,7 +29,9 @@ class Device:
         name: str,
         protocol_name: str,
         address: int,
-        commands: dict[str, Commands], # str should be valid programmable buttons - micropython limitation
+        commands: dict[
+            str, Commands
+        ],  # str should be valid programmable buttons - micropython limitation
     ):
         self.id = id
         self.name = name
@@ -50,7 +52,9 @@ class Events:
     IR_RECEIVED = "IR_RECEIVED"
     IR_TRANSMITTED = "IR_TRANSMITTED"
 
+    BATTERY_LEVEL_CHANGED = "BATTERY_LEVEL_CHANGED"
     LOW_BATTERY = "LOW_BATTERY"
+
     SLEEP_IDLE = "SLEEP_IDLE"
     SLEEP_DEEP = "SLEEP_DEEP"
     WAKE = "WAKE"
