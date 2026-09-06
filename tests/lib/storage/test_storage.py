@@ -25,7 +25,7 @@ def devices():
     return [
         {
             "id": 0,
-            "device_name": "TV Remote",
+            "name": "TV Remote",
             "protocol_name": "NEC_8",
             "address": 44,
             "commands": {
@@ -35,7 +35,7 @@ def devices():
         },
         {
             "id": 1,
-            "device_name": "Lights",
+            "name": "Lights",
             "protocol_name": "NEC_16",
             "address": 22,
             "commands": {
