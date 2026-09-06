@@ -25,7 +25,7 @@ def devices():
     return [
         {
             "id": 0,
-            "device_name": "TV Remote",
+            "name": "TV Remote",
             "protocol_name": "NEC_8",
             "address": 44,
             "commands": {
@@ -35,7 +35,7 @@ def devices():
         },
         {
             "id": 1,
-            "device_name": "Lights",
+            "name": "Lights",
             "protocol_name": "NEC_16",
             "address": 22,
             "commands": {
@@ -150,13 +150,6 @@ class TestDevices:
 
                     if key == "id":
                         assert value != 777
-
-    """
-    test_load_devices_returns_saved_devices
-    test_load_devices_returns_empty_list_on_failure
-    test_load_devices_rejects_invalid_data
-    test_devices_saves_and_loads_through_persistent_memory
-    """
 
     class TestLoadDevices:
         def test_load_devices_returns_saved_devices(
