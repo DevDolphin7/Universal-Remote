@@ -17,6 +17,7 @@ def pytest_configure():
 
     class MockEPD:
         frame_buffer = MagicMock()
+        update = lambda *_: None
 
     fake_driver.EPD = MockEPD
 
