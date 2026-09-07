@@ -15,6 +15,18 @@ class ProgrammableButtons:
 class AllButtons(ProgrammableButtons):
     MODE = "MODE"
 
+    PROGRAMMABLE = (
+        "NAV_UP",
+        "NAV_DOWN",
+        "NAV_LEFT",
+        "NAV_RIGHT",
+        "NAV_OK",
+        "VOL_UP",
+        "VOL_DOWN",
+        "CH_UP",
+        "CH_DOWN",
+    )
+
 
 class Commands:
     def __init__(self, press: int | None = None, release: int | None = None):
