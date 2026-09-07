@@ -11,6 +11,8 @@ class BatteryInterface:
             self.empty_voltage + ((self.full_voltage - self.empty_voltage) / 10), 2
         )
 
+        self.get_voltage()
+
         self._vsys = Hardware.vsys
         self._adc_volt_conversion_factor = 3.3 * 2 / 65535
         self._sample_size = 16
