@@ -144,4 +144,18 @@ class TestDisplay:
                 display._screen.frame_buffer, "Address: " + hex(learned_device.address)
             )
 
-        # test_state_change_to_normal_changes_to_normal_screen
+        def test_state_change_to_normal_changes_to_normal_screen(
+            self, event_bus, remote_names
+        ):
+            display = Display(
+                event_bus,
+                remote_names=remote_names,
+                protocol_name="NEC",
+                state=AppState.LEARNING,
+            )
+
+            assert isinstance(display._screen, LearnScreen)
+
+            event_bus.publish(Events.STATE_CHANGED, AppState.NORMAL)
+
+            assert isinstance(display._screen, NormalScreen)

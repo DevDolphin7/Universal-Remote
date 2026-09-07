@@ -29,12 +29,9 @@ class Display:
         self.set_button_index(self._buttons[0])
         self.set_screen(state)
 
-        self._event_bus = event_bus
-        self._event_bus.subscribe(Events.BUTTON_RELEASED, self.handle_button_release)
-        self._event_bus.subscribe(Events.STATE_CHANGED, self.handle_state_change)
-        self._event_bus.subscribe(
-            Events.IR_PROTOCOL_CHANGED, self.handle_ir_protocol_change
-        )
+        event_bus.subscribe(Events.BUTTON_RELEASED, self.handle_button_release)
+        event_bus.subscribe(Events.STATE_CHANGED, self.handle_state_change)
+        event_bus.subscribe(Events.IR_PROTOCOL_CHANGED, self.handle_ir_protocol_change)
 
     def get_button(self) -> str:
         return self._buttons[self._button_index]
@@ -118,6 +115,9 @@ class Display:
             self.update()
         elif state == AppState.LEARNED and isinstance(self._screen, LearnScreen):
             self.update(learned=args[0])
+        elif state == AppState.NORMAL and isinstance(self._screen, LearnScreen):
+            self.set_screen(state)
+            self.update()
 
     def handle_ir_protocol_change(self, protocol: str, *args, **kwargs) -> None:
         if isinstance(self._screen, LearnScreen):
