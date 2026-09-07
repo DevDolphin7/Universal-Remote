@@ -29,7 +29,9 @@ class Device:
         name: str,
         protocol_name: str,
         address: int,
-        commands: dict[str, Commands], # str should be valid programmable buttons - micropython limitation
+        commands: dict[
+            str, Commands
+        ],  # str should be valid programmable buttons - micropython limitation
     ):
         self.id = id
         self.name = name
@@ -50,7 +52,9 @@ class Events:
     IR_RECEIVED = "IR_RECEIVED"
     IR_TRANSMITTED = "IR_TRANSMITTED"
 
+    BATTERY_LEVEL_CHANGED = "BATTERY_LEVEL_CHANGED"
     LOW_BATTERY = "LOW_BATTERY"
+
     SLEEP_IDLE = "SLEEP_IDLE"
     SLEEP_DEEP = "SLEEP_DEEP"
     WAKE = "WAKE"
@@ -64,6 +68,18 @@ class IRData:
         self.ticks_diff = ticks_diff
 
 
+class IRProtocols:
+    NEC_8 = "NEC_8"
+    NEC_16 = "NEC_16"
+    SAMSUNG = "SAMSUNG"
+    RC5_IR = "RC5_IR"
+    RC6_M0 = "RC6_M0"
+    SONY_12 = "SONY_12"
+    SONY_15 = "SONY_15"
+    SONY_20 = "SONY_20"
+    MCE = "MCE"
+
+
 class PowerState:
     ACTIVE = 0
     IDLE = 1
@@ -73,5 +89,6 @@ class PowerState:
 class AppState:
     NORMAL = "NORMAL"
     LEARNING = "LEARNING"
+    LEARNED = "LEARNED"
 
-    ALL = (NORMAL, LEARNING)
+    ALL = (NORMAL, LEARNING, LEARNED)

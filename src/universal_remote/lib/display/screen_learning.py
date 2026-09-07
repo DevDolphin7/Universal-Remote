@@ -31,8 +31,8 @@ class LearnScreen(AllScreens):
         selected_button: int,
         id: int,
         address: int,
-        press_command: int,
-        release_command: int,
+        press_command: int | None,
+        release_command: int | None,
         battery_charge: int = 0,
     ) -> None:
         self.build_header()
@@ -55,11 +55,14 @@ class LearnScreen(AllScreens):
         selected: int,
         id: int,
         address: int,
-        press_command: int,
-        release_command: int,
+        press_command: int | None,
+        release_command: int | None,
     ) -> None:
         self.frame_buffer.text(f"Learned: {self._buttons[selected]}", 20, 50, 0)
         self.frame_buffer.text(f"ID: {id}", 20, 90, 0)
         self.frame_buffer.text(f"Address: {hex(address)}", 20, 110, 0)
-        self.frame_buffer.text(f"Press: {hex(press_command)}", 20, 130, 0)
-        self.frame_buffer.text(f"Release: {hex(release_command)}", 20, 150, 0)
+
+        if press_command:
+            self.frame_buffer.text(f"Press: {hex(press_command)}", 20, 130, 0)
+        if release_command:
+            self.frame_buffer.text(f"Release: {hex(release_command)}", 20, 150, 0)
