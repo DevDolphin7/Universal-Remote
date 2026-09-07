@@ -49,14 +49,13 @@ def remote_names():
 
 class TestDisplay:
     class TestNormalScreen:
-        def test_mode_button_released_cycles_active_remote(
-            self, event_bus, remote_names
-        ):
+        def test_device_changed_cycles_active_remote(self, event_bus, remote_names):
             display = Display(event_bus, remote_names=remote_names, protocol_name="NEC")
 
             assert isinstance(display._screen, NormalScreen)
 
-            event_bus.publish(Events.BUTTON_RELEASED, AllButtons.MODE)
+            device = Device(1, "Remote 1", "NEC", 2, {})
+            event_bus.publish(Events.DEVICE_CHANGED, device)
 
             assert isinstance(display._screen, NormalScreen)
 
