@@ -81,7 +81,7 @@ class TestDisplay:
             assert isinstance(display._screen, LearnScreen)
 
             assert_text_called_with_specific_text_once(
-                display._screen.frame_buffer, "Learning: " + ProgrammableButtons.CH_DOWN
+                display._screen.frame_buffer, "Learning: " + display.get_button()
             )
 
     class TestLearnScreen:

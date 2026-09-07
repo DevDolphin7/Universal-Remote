@@ -6,9 +6,6 @@ class AllScreens(EPD):
         super().__init__()
         self.protocol_name = protocol_name
 
-        self._screen_width = 200
-        self._screen_height = 200
-
         self._battery_x_y = (165, 190)
         self._battery_height = 8
         self._battery_width = 22

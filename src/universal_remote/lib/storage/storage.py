@@ -12,14 +12,14 @@ class Storage:
         self.default_state = default_state
 
     def save_state(self, state: str) -> None:
-        """Save the state provided in non-voltile memory"""
+        """Save the state provided in non-volatile memory"""
         self._validate_state(state)
 
         with open(self.state_path, "w") as file:
             json.dump(state, file)
 
     def load_state(self) -> str:
-        """Load the state from non-voltile memory"""
+        """Load the state from non-volatile memory"""
         try:
             with open(self.state_path, "r") as file:
                 state: str = json.load(file)
@@ -35,14 +35,14 @@ class Storage:
             raise ValueError("Invalid state")
 
     def save_devices(self, devices: list[dict]) -> None:
-        """Save the devices provided in non-voltile memory"""
+        """Save the devices provided in non-volatile memory"""
         valid_devices = self._validate_devices(devices)
 
         with open(self.devices_path, "w") as file:
             json.dump(valid_devices, file)
 
     def load_devices(self) -> list[dict]:
-        """Load the devices from non-voltile memory"""
+        """Load the devices from non-volatile memory"""
         try:
             with open(self.devices_path, "r") as file:
                 devices: list[dict] = json.load(file)

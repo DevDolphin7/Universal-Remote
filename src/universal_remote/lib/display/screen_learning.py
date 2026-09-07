@@ -62,7 +62,7 @@ class LearnScreen(AllScreens):
         self.frame_buffer.text(f"ID: {id}", 20, 90, 0)
         self.frame_buffer.text(f"Address: {hex(address)}", 20, 110, 0)
 
-        if press_command:
+        if press_command is not None:
             self.frame_buffer.text(f"Press: {hex(press_command)}", 20, 130, 0)
-        if release_command:
+        if release_command is not None:
             self.frame_buffer.text(f"Release: {hex(release_command)}", 20, 150, 0)

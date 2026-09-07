@@ -3,7 +3,7 @@ from universal_remote.lib.core.types import IRData
 from universal_remote.lib.drivers.protocol_registry import IRProtocolInterface
 
 
-class Reciever:
+class Receiver:
     def __init__(self, protocol: IRProtocolInterface) -> None:
         """Initializes the IR receiver with a given protocol and sets up the callback for received data."""
         self.last_commands = []

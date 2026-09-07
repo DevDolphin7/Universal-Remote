@@ -30,12 +30,6 @@ class TestNormalScreen:
             assert screen.menu_items.count(item) == 1
             assert_text_called_with_specific_text_once(screen.frame_buffer, item)
 
-    def test_build_normal_screen_contains_screen_dimensions(self, some_remotes):
-        screen = NormalScreen(menu_items=some_remotes, protocol_name="Protocol 1")
-
-        assert screen._screen_width == 200
-        assert screen._screen_height == 200
-
     def test_build_normal_screen_handles_empty_remote_list(self):
         screen = NormalScreen(menu_items=[], protocol_name="Protocol 1")
         screen.build(selected_remote=0, battery_charge=3)

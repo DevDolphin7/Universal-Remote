@@ -99,9 +99,10 @@ class IRProtocolInterface:
         for index, protocol in enumerate(self._tx_protocols):
             if protocol_name == protocol.name:
                 protocol_index = index
+                break
 
         if protocol_index == None:
-            raise IndexError("Protocol name provided is not recognised")
+            raise ValueError("Protocol name provided is not recognised")
 
         self.index = protocol_index
 
