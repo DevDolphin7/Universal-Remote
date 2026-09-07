@@ -5,8 +5,10 @@
         "protocol": "NEC",
         "address": 0,
         "commands": {
-            "press": 4,
-            "release": 0
+            "VOL_UP": {
+                "press": 4,
+                "release": 0
+            }
         }
     },
     {
@@ -15,8 +17,14 @@
         "protocol": "NEC",
         "address": 0,
         "commands": {
-            "press": 4,
-            "release": "None"
+            "VOL_UP": {
+                "press": 5,
+                "release": 6
+            },
+            "CH_UP": {
+                "press": 7,
+                "release": "None"
+            }
         }
     }
 ]
