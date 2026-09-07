@@ -8,7 +8,7 @@ class NormalScreen(AllScreens):
 
     def get_visible_items(self, selected: int) -> list[str]:
         """Returns a list of menu items that should be visible on the screen based on the selected item."""
-        visible_items = [item for item in self.menu_items]
+        visible_items = list(self.menu_items)
 
         if len(visible_items) > 6:
             visible_items = visible_items + visible_items
@@ -18,7 +18,7 @@ class NormalScreen(AllScreens):
 
     def set_menu_items(self, items: list[str]) -> None:
         """Updates the list of menu items (remotes) to be displayed on the screen."""
-        self.menu_items = [item for item in items] + ["Add New"]
+        self.menu_items = list(items) + ["Add New"]
 
     def build(self, selected_remote: int = 0, battery_charge: int = 0) -> None:
         self.build_menu(selected_remote)
