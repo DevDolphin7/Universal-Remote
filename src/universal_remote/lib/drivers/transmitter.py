@@ -20,9 +20,9 @@ class Transmitter:
         self._protocol.tx.transmit(address, command)
 
         time_elapsed = 0
-        while self._protocol.tx.busy() and time_elapsed < self._timeout:
-            sleep_ms(self._timeout_interval)
-            time_elapsed += self._timeout_interval
-
+        while self._protocol.tx.busy():
             if time_elapsed > self._timeout:
                 raise TimeoutError("Transmission timeout")
+
+            sleep_ms(self._timeout_interval)
+            time_elapsed += self._timeout_interval
