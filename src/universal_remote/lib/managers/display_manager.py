@@ -58,9 +58,7 @@ class Display:
         self._battery_charge = charge
 
     def set_buttons(self) -> None:
-        self._buttons = [
-            button for button in dir(ProgrammableButtons) if button[:2] != "__"
-        ]
+        self._buttons = [button for button in AllButtons.PROGRAMMABLE]
 
     def set_button_index(self, button: str) -> None:
         self._button_index = self._buttons.index(button)
