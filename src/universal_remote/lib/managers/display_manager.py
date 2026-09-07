@@ -30,11 +30,18 @@ class Display:
         self.set_screen(state)
 
         event_bus.subscribe(Events.BUTTON_RELEASED, self.handle_button_release)
+        event_bus.subscribe(Events.DEVICE_CHANGED, self.handle_device_change)
         event_bus.subscribe(Events.STATE_CHANGED, self.handle_state_change)
         event_bus.subscribe(Events.IR_PROTOCOL_CHANGED, self.handle_ir_protocol_change)
 
     def get_button(self) -> str:
         return self._buttons[self._button_index]
+
+    def set_remote_index_from_device(self, device: Device) -> None:
+        for index, name in enumerate(self._remote_names):
+            if name == device.name:
+                self._remote_index = index
+                break
 
     def set_protocol_name(self, protocol_name: str) -> None:
         self._protocol_name = protocol_name
@@ -63,17 +70,6 @@ class Display:
     def set_button_index(self, button: str) -> None:
         self._button_index = self._buttons.index(button)
 
-    def scroll_menu(self) -> None:
-        if not isinstance(self._screen, NormalScreen):
-            return
-
-        if self._remote_index == len(self._screen.menu_items) - 1:
-            self._remote_index = 0
-        else:
-            self._remote_index += 1
-
-        self.update()
-
     def update(self, learned: Device | None = None) -> None:
         if isinstance(self._screen, NormalScreen):
             self._screen.build(
@@ -98,13 +94,13 @@ class Display:
         self._screen.update()
 
     def handle_button_release(self, button: str, *args, **kwargs) -> None:
-        if button == AllButtons.MODE and isinstance(self._screen, NormalScreen):
-            self.scroll_menu()
-        elif button in dir(ProgrammableButtons) and isinstance(
-            self._screen, LearnScreen
-        ):
+        if button in dir(ProgrammableButtons) and isinstance(self._screen, LearnScreen):
             self.set_button_index(button)
             self.update()
+
+    def handle_device_change(self, device: Device) -> None:
+        self.set_remote_index_from_device(device)
+        self.update()
 
     def handle_state_change(self, state: str, *args, **kwargs) -> None:
         if state == AppState.LEARNING and isinstance(self._screen, NormalScreen):
