@@ -16,7 +16,6 @@ from universal_remote.lib.managers.display_manager import Display
 def assert_text_called_with_specific_text_once(frame_buffer, text: str):
     text_call_args = [call[0][0] for call in frame_buffer.text.call_args_list]
     arg_matches = re.findall(rf"{re.escape(text)}'", str(text_call_args))
-    print(text_call_args)
     assert len(arg_matches) == 1
 
 
