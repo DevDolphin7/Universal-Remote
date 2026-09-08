@@ -5,7 +5,6 @@ from universal_remote.lib.core.types import (
     AppState,
     Events,
     AllButtons,
-    ProgrammableButtons,
     Device,
 )
 
@@ -31,8 +30,13 @@ class Display:
 
         event_bus.subscribe(Events.BUTTON_RELEASED, self.handle_button_release)
         event_bus.subscribe(Events.DEVICE_CHANGED, self.handle_device_change)
+        event_bus.subscribe(Events.DEVICE_ADDED, self.handle_device_added)
         event_bus.subscribe(Events.STATE_CHANGED, self.handle_state_change)
         event_bus.subscribe(Events.IR_PROTOCOL_CHANGED, self.handle_ir_protocol_change)
+        event_bus.subscribe(
+            Events.BATTERY_LEVEL_CHANGED, self.handle_battery_level_change
+        )
+        event_bus.subscribe(Events.LOW_BATTERY, self.handle_low_battery)
 
     def get_button(self) -> str:
         return self._buttons[self._button_index]
@@ -94,12 +98,22 @@ class Display:
         self._screen.update()
 
     def handle_button_release(self, button: str, *args, **kwargs) -> None:
-        if button in dir(ProgrammableButtons) and isinstance(self._screen, LearnScreen):
+        if button in AllButtons.PROGRAMMABLE and isinstance(self._screen, LearnScreen):
             self.set_button_index(button)
             self.update()
 
     def handle_device_change(self, device: Device) -> None:
         self.set_remote_index_from_device(device)
+        self.update()
+
+    def handle_device_added(self, added_device: Device, devices: list[Device]) -> None:
+        remote_names = [device.name for device in devices]
+
+        self.set_remote_names(remote_names=remote_names)
+
+        if isinstance(self._screen, NormalScreen):
+            self._screen.set_menu_items(remote_names)
+
         self.update()
 
     def handle_state_change(self, state: str, *args, **kwargs) -> None:
@@ -117,3 +131,10 @@ class Display:
         if isinstance(self._screen, LearnScreen):
             self._screen.set_protocol_name(protocol)
             self.update()
+
+    def handle_battery_level_change(self, battery_level: int) -> None:
+        self.set_battery_charge(battery_level)
+        self.update()
+
+    def handle_low_battery(self) -> None:
+        self.handle_battery_level_change(0)
