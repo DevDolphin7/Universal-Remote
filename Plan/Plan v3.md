@@ -60,7 +60,7 @@ Drivers > Core > Storage > Display > Managers > main
 ### TDD
 
 | Folder   | File                 | TDD Required | Comment                                                                                                                         |
-| -------- | -------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------  |
+| -------- | -------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | drivers  | /ir_rx               | No           | Module implemented by [peterhinch](https://github.com/peterhinch/micropython_ir)                                                |
 | drivers  | /ir_tx               | No           | Module implemented by [peterhinch](https://github.com/peterhinch/micropython_ir)                                                |
 | drivers  | hardware.py          | No           | Hardware pin configuration only                                                                                                 |
@@ -96,3 +96,22 @@ Drivers > Core > Storage > Display > Managers > main
 - Common user operations should require 1 press.
 - Users must always have a method of recovering from accidental configuration or corrupted data.
 - The device should be capable of recovering to a functional default state.
+
+### Event Publish Data
+
+All event handlers should deal with \*args and \*\*kwargs, below is a table of the minimum required data for a successful publish.
+
+| Event                 | Required Publish Data   |
+|-----------------------|-------------------------|
+| BUTTON_RELEASED       | button name             |
+| DEVICE_CHANGED        | Device (changed to)     |
+| DEVICE_ADDED          | Device (added)          |
+| STATE_CHANGED         | state name              |
+| IR_PROTOCOL_CHANGED   | protocol name           |
+| BATTERY_LEVEL_CHANGED | battery level (int 0-4) |
+| LOW_BATTERY           | -                       |
+
+# Notes
+FIO during testing:
+- read_u16 value of 21800 = 2.2V (battery low cut off)
+- read_u16 value of 27800 = 2.8V (battery full cut off)
