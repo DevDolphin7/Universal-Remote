@@ -103,7 +103,9 @@ All event handlers should deal with \*args and \*\*kwargs, below is a table of t
 
 | Event                 | Required Publish Data   |
 |-----------------------|-------------------------|
+| BUTTON_PRESSED        | button name             |
 | BUTTON_RELEASED       | button name             |
+| BUTTON_HELD           | button name             |
 | DEVICE_CHANGED        | Device (changed to)     |
 | DEVICE_ADDED          | Device (added)          |
 | STATE_CHANGED         | state name              |
