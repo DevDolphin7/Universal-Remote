@@ -106,7 +106,7 @@ class Display:
         self.set_remote_index_from_device(device)
         self.update()
 
-    def handle_device_added(self, added_device: Device, devices: list[Device]) -> None:
+    def handle_device_added(self, devices: list[Device]) -> None:
         remote_names = [device.name for device in devices]
 
         self.set_remote_names(remote_names=remote_names)
