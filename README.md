@@ -300,6 +300,14 @@ The implementation architecture is intentionally not defined here and may evolve
 
 Feature files remain the authoritative definition of behaviour.
 
+## Useful Learnings Going Forward from this Project
+
+- When prototypes are complete, release / tag them so you can refer back later.
+- Feature Files / BDD are useful AFTER prototyping / spiking.
+- You don't need to TDD every file! If there's reason not to, just document your reasoning.
+- Event driven architectures are great for micro-controller systems.
+- Define all the required / sensible Events, when you group them you're basically defining your "manager" files.
+
 ---
 
 # Hardware
