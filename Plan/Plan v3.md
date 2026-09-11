@@ -107,7 +107,8 @@ All event handlers should deal with \*args and \*\*kwargs, below is a table of t
 | BUTTON_RELEASED       | button name             |
 | BUTTON_HELD           | button name             |
 | DEVICE_CHANGED        | Device (changed to)     |
-| DEVICE_ADDED          | Device (added)          |
+| DEVICE_ADDED          | list of all Devices     |
+| DEVICE_LEARNED        | Device (created)        |
 | STATE_CHANGED         | state name              |
 | IR_PROTOCOL_CHANGED   | protocol name           |
 | BATTERY_LEVEL_CHANGED | battery level (int 0-4) |

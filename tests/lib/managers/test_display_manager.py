@@ -80,7 +80,7 @@ class TestDisplay:
 
             mock_updated_devices = [learned_device]
 
-            event_bus.publish(Events.DEVICE_ADDED, learned_device, mock_updated_devices)
+            event_bus.publish(Events.DEVICE_ADDED, mock_updated_devices)
 
             assert_text_called_with_specific_text_once(
                 display._screen.frame_buffer, "Added Remote"
