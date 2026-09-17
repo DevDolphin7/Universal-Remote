@@ -14,7 +14,7 @@ from universal_remote.lib.core.types import (
 def create_remote(number: int):
     return Device(
         id=number,
-        name="New Remote",
+        name=f"Remote {number}",
         protocol_name="NEC",
         address=number + 1,
         commands={AllButtons.NAV_OK: Commands(press=number + 2, release=number + 3)},
@@ -84,6 +84,19 @@ class TestRemote:
                 assert output[index] == remote
 
     class TestAddRemote:
+        def test_creates_blank_remote_on_new_remote_requested(self, event_bus, remotes):
+            mock: Mock = Mock()
+            event_bus.subscribe(Events.NEW_DEVICE, mock)
+
+            remote = Remote(event_bus, remotes)
+
+            event_bus.publish(Events.NEW_DEVICE_REQUESTED)
+
+            mock.assert_called_once()
+            blank_remote: Device = mock.call_args[0][0]
+            assert blank_remote.name == "Add New"
+            assert blank_remote.protocol_name == "NEC_8"
+
         def test_adds_a_new_remote_on_appstate_learning_on_add_new(
             self, event_bus, remotes
         ):

@@ -23,7 +23,14 @@ def pytest_configure():
     fake_epd_driver.EPD = MockEPD
     sys.modules["universal_remote.lib.drivers.epd1in54_V2"] = fake_epd_driver
 
-    # Mock the Hardware module
+    # Mock the utime module
+    fake_utime = types.ModuleType("utime")
+    fake_utime.sleep_ms = lambda _: None
+    fake_utime.ticks_ms = lambda _: 123456789
+    fake_utime.ticks_diff = lambda a, b: 1000
+    sys.modules["utime"] = fake_utime
+
+    # Mock the Hardware driver
     fake_hardware = types.ModuleType("universal_remote.lib.drivers.hardware")
 
     class MockHardware:
@@ -45,10 +52,18 @@ def pytest_configure():
     fake_hardware.Hardware = MockHardware
     sys.modules["universal_remote.lib.drivers.hardware"] = fake_hardware
 
-    # Mock the utime module
-    fake_utime = types.ModuleType("utime")
-    fake_utime.sleep_ms = lambda _: None
-    sys.modules["utime"] = fake_utime
+    # Mock the IRProtocolInterface driver
+    fake_protocol_registry = types.ModuleType(
+        "universal_remote.lib.drivers.protocol_registry"
+    )
+
+    class MockIRProtocolInterface:
+        change_protocol_to_named = MagicMock()
+
+    fake_protocol_registry.IRProtocolInterface = MockIRProtocolInterface
+    sys.modules["universal_remote.lib.drivers.protocol_registry"] = (
+        fake_protocol_registry
+    )
 
 
 @pytest.fixture

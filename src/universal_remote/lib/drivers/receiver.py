@@ -14,11 +14,11 @@ class Receiver:
 
     def set_protocol(self, protocol: IRProtocolInterface) -> None:
         """Set the protocol for the IR reciver"""
-        try:
+        if hasattr(self, "_protocol"):
             self.close()
-        finally:
-            self._protocol = protocol
-            self.start()
+
+        self._protocol = protocol
+        self.start()
 
     def start(self) -> None:
         """Start the IR receiver listening"""

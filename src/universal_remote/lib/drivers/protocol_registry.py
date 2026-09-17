@@ -12,13 +12,19 @@ from universal_remote.lib.drivers.ir_tx.sony import (
 from universal_remote.lib.drivers.ir_tx.mce import MCE_TX
 from universal_remote.lib.drivers.hardware import Hardware
 
-RxProtocolType = type[
-    NEC_8 | NEC_16 | SAMSUNG | RC5_IR | RC6_M0 | SONY_12 | SONY_15 | SONY_20 | MCE
-]
+try:
+    from typing import TYPE_CHECKING
 
-TxProtocolType = type[
-    NEC_TX | RC5_TX | RC6_M0_TX | SONY_12_TX | SONY_15_TX | SONY_20_TX | MCE_TX
-]
+    RxProtocolType = type[
+        NEC_8 | NEC_16 | SAMSUNG | RC5_IR | RC6_M0 | SONY_12 | SONY_15 | SONY_20 | MCE
+    ]
+
+    TxProtocolType = type[
+        NEC_TX | RC5_TX | RC6_M0_TX | SONY_12_TX | SONY_15_TX | SONY_20_TX | MCE_TX
+    ]
+except ImportError:
+    RxProtocolType = object
+    TxProtocolType = object
 
 
 class RxProtocol:
