@@ -21,6 +21,9 @@ class Remote:
         self.event_bus.subscribe(
             Events.IR_PROTOCOL_CHANGED, self.handle_ir_protocol_change
         )
+        self.event_bus.subscribe(
+            Events.NEW_DEVICE_REQUESTED, self.handle_new_device_request
+        )
 
     def get_active_remote(self) -> Device:
         return self._remotes[self._selected]
@@ -61,3 +64,15 @@ class Remote:
 
     def handle_ir_protocol_change(self, protocol_name: str) -> None:
         self.get_active_remote().protocol_name = protocol_name
+
+    def handle_new_device_request(self) -> None:
+        self.event_bus.publish(
+            Events.NEW_DEVICE,
+            Device(
+                id=len(self.get_all_remote_names()),
+                name="Add New",
+                protocol_name="NEC_8",
+                address=0,
+                commands={},
+            ),
+        )
