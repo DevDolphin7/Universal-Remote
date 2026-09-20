@@ -10,7 +10,7 @@ class State:
         """Get the current mode"""
         return self._mode
 
-    def set(self, state: str) -> None:
+    def set(self, state: str, remote=None) -> None:
         """Change the mode to a valid AppState"""
         if self._mode == state:
             return
@@ -19,7 +19,11 @@ class State:
             raise ValueError("Invalid state provided")
 
         self._mode = state
-        self._bus.publish(Events.STATE_CHANGED, state)
+
+        if state == AppState.LEARNED:
+            self._bus.publish(Events.STATE_CHANGED, state, remote)
+        else:
+            self._bus.publish(Events.STATE_CHANGED, state)
 
     def to_dict(self) -> dict[str, str]:
         """Convert the State to a dictionary."""
