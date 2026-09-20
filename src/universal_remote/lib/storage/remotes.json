@@ -2,7 +2,7 @@
     {
         "id": 1,
         "name": "TV Remote",
-        "protocol": "NEC",
+        "protocol_name": "NEC_8",
         "address": 0,
         "commands": {
             "VOL_UP": {
@@ -14,7 +14,7 @@
     {
         "id": 2,
         "name": "TV Remote 2",
-        "protocol": "NEC",
+        "protocol_name": "NEC_16",
         "address": 0,
         "commands": {
             "VOL_UP": {
