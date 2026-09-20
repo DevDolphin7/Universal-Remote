@@ -1,5 +1,5 @@
 import json
-from universal_remote.lib.core.types import AppState, Device
+from universal_remote.lib.core.types import AppState, Device, Commands
 
 
 class Storage:
@@ -57,9 +57,24 @@ class Storage:
 
         for device in devices:
             try:
-                Device(**device)
+                commands = {}
+                for key, command_dict in device["commands"].items():
+                    try:
+                        commands[key] = Commands(
+                            press=command_dict["press"], release=command_dict["release"]
+                        )
+                    except KeyError:
+                        commands[key] = Commands(press=command_dict["press"])
+
+                Device(
+                    device["id"],
+                    device["name"],
+                    device["protocol_name"],
+                    device["address"],
+                    commands,
+                )
                 valid_devices.append(device)
-            except (TypeError, ValueError):
+            except (TypeError, KeyError, ValueError):
                 continue
 
         return valid_devices

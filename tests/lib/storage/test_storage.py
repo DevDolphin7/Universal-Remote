@@ -29,8 +29,8 @@ def devices():
             "protocol_name": "NEC_8",
             "address": 44,
             "commands": {
-                "nav_ok": {"press": 4, "release": 0},
-                "nav_down": {"press": 3, "release": 0},
+                "NAV_OK": {"press": 4, "release": 0},
+                "NAV_DOWN": {"press": 3, "release": 0},
             },
         },
         {
@@ -39,8 +39,8 @@ def devices():
             "protocol_name": "NEC_16",
             "address": 22,
             "commands": {
-                "nav_up": {"press": 2, "release": 10},
-                "nav_lef": {"press": 1, "release": 20},
+                "NAV_UP": {"press": 2, "release": 10},
+                "NAV_LEFT": {"press": 1, "release": 20},
             },
         },
     ]
