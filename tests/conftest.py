@@ -26,7 +26,7 @@ def pytest_configure():
     # Mock the utime module
     fake_utime = types.ModuleType("utime")
     fake_utime.sleep_ms = lambda _: None
-    fake_utime.ticks_ms = lambda _: 123456789
+    fake_utime.ticks_ms = lambda *_: 123456789
     fake_utime.ticks_diff = lambda a, b: 1000
     sys.modules["utime"] = fake_utime
 
