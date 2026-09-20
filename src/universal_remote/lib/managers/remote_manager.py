@@ -49,23 +49,23 @@ class Remote:
         else:
             self._selected += 1
 
-    def handle_button_released(self, button: str) -> None:
+    def handle_button_released(self, button: str, *args, **kwargs) -> None:
         if button == AllButtons.MODE and self._app_state == AppState.NORMAL:
             self.increment_selected()
             self.event_bus.publish(Events.DEVICE_CHANGED, self.get_active_remote())
 
-    def handle_state_change(self, state: str) -> None:
+    def handle_state_change(self, state: str, *args, **kwargs) -> None:
         self._app_state = state
 
-    def handle_device_learn(self, remote: Device) -> None:
+    def handle_device_learn(self, remote: Device, *args, **kwargs) -> None:
         self._remotes.append(remote)
         self.set_selected(len(self._remotes) - 1)
         self.event_bus.publish(Events.DEVICE_ADDED, self.get_all_remotes())
 
-    def handle_ir_protocol_change(self, protocol_name: str) -> None:
+    def handle_ir_protocol_change(self, protocol_name: str, *args, **kwargs) -> None:
         self.get_active_remote().protocol_name = protocol_name
 
-    def handle_new_device_request(self) -> None:
+    def handle_new_device_request(self, *args, **kwargs) -> None:
         self.event_bus.publish(
             Events.NEW_DEVICE,
             Device(
