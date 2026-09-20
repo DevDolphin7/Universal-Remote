@@ -35,3 +35,23 @@ class TestPower:
 
         mock.assert_called_once()
         assert power.is_low()
+
+    def test_on_sleep_publish_sleep(self, event_bus, mock_vsys):
+        mock: Mock = Mock()
+        event_bus.subscribe(Events.SLEEP_DEEP, mock)
+        mock_vsys.read_u16.return_value = 22800
+        power = Power(event_bus)
+
+        power.sleep()
+
+        mock.assert_called_once()
+
+    def test_on_wake_publish_wake(self, event_bus, mock_vsys):
+        mock: Mock = Mock()
+        event_bus.subscribe(Events.WAKE, mock)
+        mock_vsys.read_u16.return_value = 22800
+        power = Power(event_bus)
+
+        power.wake()
+
+        mock.assert_called_once()

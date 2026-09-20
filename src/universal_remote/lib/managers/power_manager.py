@@ -23,7 +23,7 @@ class Power:
         """Reads the voltage from the battery using the ADC and returns the calculated voltage."""
         raw = self._vsys.read_u16()
 
-        return raw * self._adc_volt_conversion_factor
+        return float(raw * self._adc_volt_conversion_factor)
 
     def get_voltage(self) -> float:
         """Reads the battery voltage multiple times and returns the average voltage rounded to 2 decimal places."""
@@ -82,3 +82,9 @@ class Power:
 
             if self.is_low():
                 self.event_bus.publish(Events.LOW_BATTERY)
+
+    def sleep(self):
+        self.event_bus.publish(Events.SLEEP_DEEP)
+
+    def wake(self):
+        self.event_bus.publish(Events.WAKE)
