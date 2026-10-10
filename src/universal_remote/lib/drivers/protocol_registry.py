@@ -90,7 +90,7 @@ class IRProtocolInterface:
         """Returns the class of the current TX protocol."""
         return self._tx_protocols[self.index].protocol
 
-    def next_protocol(self, rx_callback) -> None:
+    def next_protocol(self, rx_callback) -> str:
         """Changes the current IR protocol for both the receiver and transmitter."""
         self.index += 1
         if self.index >= len(self._rx_protocols):
@@ -98,6 +98,8 @@ class IRProtocolInterface:
 
         self.set_rx(rx_callback)
         self.set_tx()
+
+        return self._rx_protocols[self.index].name
 
     def change_protocol_to_named(self, protocol_name, rx_callback) -> None:
         """Changes the current IR protocol for both the receiver and transmitter."""

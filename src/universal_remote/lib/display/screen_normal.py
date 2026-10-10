@@ -13,12 +13,14 @@ class NormalScreen(AllScreens):
         if len(visible_items) > 6:
             visible_items = visible_items + visible_items
             visible_items = visible_items[selected : selected + 6]
+        else:
+            visible_items = visible_items[selected:] + visible_items[:selected]
 
         return visible_items
 
     def set_menu_items(self, items: list[str]) -> None:
         """Updates the list of menu items (remotes) to be displayed on the screen."""
-        self.menu_items = list(items) + ["Add New"]
+        self.menu_items = list(items)
 
     def build(self, selected_remote: int = 0, battery_charge: int = 0) -> None:
         self.build_menu(selected_remote)

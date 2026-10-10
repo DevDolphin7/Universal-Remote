@@ -34,14 +34,12 @@ class Storage:
         if state not in AppState.ALL:
             raise ValueError("Invalid state")
 
-    def save_devices(self, devices: list[dict]) -> None:
+    def save_devices(self, devices: list[Device]) -> None:
         """Save the devices provided in non-volatile memory"""
-        valid_devices = self._validate_devices(devices)
-
         with open(self.devices_path, "w") as file:
-            json.dump(valid_devices, file)
+            json.dump(self._devices_to_dict(devices), file)
 
-    def load_devices(self) -> list[dict]:
+    def load_devices(self) -> list[Device]:
         """Load the devices from non-volatile memory"""
         try:
             with open(self.devices_path, "r") as file:
@@ -51,7 +49,31 @@ class Storage:
         except (OSError, ValueError):
             return []
 
-    def _validate_devices(self, devices: list[dict]) -> list[dict]:
+    def _devices_to_dict(self, devices: list[Device]) -> list[dict]:
+        """Convert devices to a list of dictionaries"""
+        remote_dicts = []
+
+        for device in devices:
+            commands_dict = {}
+            for key, command in device.commands.items():
+                commands_dict[key] = {
+                    "press": command.press,
+                    "release": command.release,
+                }
+
+            remote_dicts.append(
+                {
+                    "id": device.id,
+                    "name": device.name,
+                    "protocol_name": device.protocol_name,
+                    "address": device.address,
+                    "commands": commands_dict,
+                }
+            )
+
+        return remote_dicts
+
+    def _validate_devices(self, devices: list[dict]) -> list[Device]:
         """Validate each device in a list, remove items that are not devices"""
         valid_devices = []
 
@@ -66,14 +88,15 @@ class Storage:
                     except KeyError:
                         commands[key] = Commands(press=command_dict["press"])
 
-                Device(
-                    device["id"],
-                    device["name"],
-                    device["protocol_name"],
-                    device["address"],
-                    commands,
+                valid_devices.append(
+                    Device(
+                        device["id"],
+                        device["name"],
+                        device["protocol_name"],
+                        device["address"],
+                        commands,
+                    )
                 )
-                valid_devices.append(device)
             except (TypeError, KeyError, ValueError):
                 continue
 

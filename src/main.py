@@ -1,6 +1,7 @@
 from utime import sleep_ms
 from universal_remote.lib.core.event_bus import EventBus
 from universal_remote.lib.core.state import State
+from universal_remote.lib.drivers.protocol_registry import IRProtocolInterface
 from universal_remote.lib.managers.remote_manager import Remote
 from universal_remote.lib.managers.learn_manager import Learn
 from universal_remote.lib.managers.power_manager import Power
@@ -25,12 +26,7 @@ storage = Storage(
     devices_path="universal_remote/lib/storage/remotes.json",
 )
 
-remotes = []
-print(storage.load_devices(), "<<<<<<<<<")
-for device in storage.load_devices():
-    print(remote, "<<<<>>>", remote.name)
-    remotes.append(Device(**device))
-remote = Remote(event_bus, remotes)
+remote = Remote(event_bus, storage)
 
 power = Power(event_bus)
 
@@ -41,11 +37,19 @@ display = Display(
     battery_charge=power.state,
 )
 
-learn = Learn(event_bus, remote)
+ir_protocol_interface = IRProtocolInterface()
 
-device_manager = DeviceManager(event_bus, State(event_bus), power, display, learn)
+state = State(event_bus)
+
+learn = Learn(event_bus, state, remote, ir_protocol_interface)
+
+device_manager = DeviceManager(
+    event_bus, state, remote, power, display, learn, ir_protocol_interface
+)
 
 buttons = Buttons(event_bus)
+
+display.update()
 
 
 def print_ir_data(ir_datas):
@@ -73,7 +77,7 @@ count = 0
 while True:
     device_manager.update()
     buttons.update()
-    if count % 10 == 0:
+    if count % 100 == 0:
         print(device_manager.state.get(), "<<< state     ")
     count += 1
     sleep_ms(100)

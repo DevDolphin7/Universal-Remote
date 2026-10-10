@@ -1,4 +1,5 @@
 from universal_remote.lib.core.event_bus import EventBus
+from universal_remote.lib.storage.storage import Storage
 from universal_remote.lib.core.types import Events, Device, AppState, AllButtons
 
 
@@ -6,12 +7,13 @@ class Remote:
     def __init__(
         self,
         event_bus: EventBus,
-        remotes: list[Device],
+        storage: Storage,
         selected: int = 0,
         app_state: str = "NORMAL",
     ):
         self.event_bus = event_bus
-        self.set_remotes(remotes)
+        self.storage = storage
+        self.set_remotes(storage.load_devices())
         self.set_selected(selected)
         self._app_state = app_state
 
@@ -40,14 +42,25 @@ class Remote:
     def set_remotes(self, remotes: list[Device]):
         self._remotes = list(remotes)
 
+        self._remotes.append(
+            Device(
+                id=len(self.get_all_remote_names()),
+                name="Add New",
+                protocol_name="NEC_8",
+                address=0,
+                commands={},
+            )
+        )
+
     def set_selected(self, selected: int):
         self._selected = selected
 
     def increment_selected(self) -> None:
         if self._selected == len(self._remotes) - 1:
-            self._selected = 0
+            self.set_selected(0)
         else:
-            self._selected += 1
+            self.set_selected(self._selected + 1)
+        print("selected: ", self._selected)
 
     def handle_button_released(self, button: str, *args, **kwargs) -> None:
         if button == AllButtons.MODE and self._app_state == AppState.NORMAL:
@@ -58,9 +71,15 @@ class Remote:
         self._app_state = state
 
     def handle_device_learn(self, remote: Device, *args, **kwargs) -> None:
-        self._remotes.append(remote)
-        self.set_selected(len(self._remotes) - 1)
+        self._remotes.insert(len(self._remotes) - 1, remote)
+        for remote in self._remotes:
+            print("remote: ", remote.name, "        commands: ", remote.commands)
+        # self.set_selected(len(self._remotes) - 1)
+        # self.set_remotes(self._remotes)
         self.event_bus.publish(Events.DEVICE_ADDED, self.get_all_remotes())
+        self.storage.save_devices(
+            self.get_all_remotes()[:-1]
+        )  # Save all remotes except the "Add New" remote to storage
 
     def handle_ir_protocol_change(self, protocol_name: str, *args, **kwargs) -> None:
         self.get_active_remote().protocol_name = protocol_name

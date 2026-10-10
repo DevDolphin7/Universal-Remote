@@ -1,10 +1,14 @@
 [
     {
         "id": 1,
-        "name": "TV Remote",
+        "name": "TV",
         "protocol_name": "NEC_8",
         "address": 0,
         "commands": {
+            "NAV_OK": {
+                "press": 4,
+                "release": 1
+            },
             "VOL_UP": {
                 "press": 4,
                 "release": 0
@@ -13,7 +17,7 @@
     },
     {
         "id": 2,
-        "name": "TV Remote 2",
+        "name": "Sound Bar",
         "protocol_name": "NEC_16",
         "address": 0,
         "commands": {
@@ -24,6 +28,10 @@
             "CH_UP": {
                 "press": 7,
                 "release": "None"
+            },
+            "NAV_OK": {
+                "press": 4,
+                "release": 1
             }
         }
     }

@@ -42,6 +42,7 @@ class Buttons:
                     button["held_count"] += 1
                     if button["held_count"] == self._held_threshold:
                         self.event_bus.publish(Events.BUTTON_HELD, button["name"])
+                        self._pressed_buttons.remove(button)
                     return False  # Already pressed
 
             sleep_ms(20)  # Prevent debouncing issues

@@ -1,21 +1,28 @@
 from utime import ticks_ms, ticks_diff
 from universal_remote.lib.core.event_bus import EventBus
+from universal_remote.lib.core.state import State
 from universal_remote.lib.managers.remote_manager import Remote
 from universal_remote.lib.drivers.protocol_registry import IRProtocolInterface
 from universal_remote.lib.core.types import Events, IRData, AllButtons, Commands, Device
 
 
 class Learn:
-    def __init__(self, event_bus: EventBus, remote: Remote) -> None:
+    def __init__(
+        self,
+        event_bus: EventBus,
+        state: State,
+        remote: Remote,
+        ir_protocol_interface: IRProtocolInterface,
+    ) -> None:
         self.event_bus = event_bus
+        self.state = state
         self.remote = remote
+        self._protocol_interface = ir_protocol_interface
 
         self.latest_ir_data: list[IRData] = []
         self._last_rx_ticks = 0
         self._active_button = AllButtons.CH_UP
         self._blank_remote = None
-
-        self.set_protocol_interface()
 
         event_bus.subscribe(Events.BUTTON_RELEASED, self.handle_button_release)
         event_bus.subscribe(Events.IR_RECEIVED, self.handle_ir_received)
@@ -24,13 +31,12 @@ class Learn:
     def request_new_remote(self) -> None:
         self.event_bus.publish(Events.NEW_DEVICE_REQUESTED)
 
-    def set_protocol_interface(self) -> None:
+    def increment_protocol(self) -> None:
         remote = self.remote.get_active_remote()
+        next_protocol = self._protocol_interface.next_protocol(self.receive_ir)
 
-        self._protocol_interface = IRProtocolInterface()
-        self._protocol_interface.change_protocol_to_named(
-            remote.protocol_name, self.receive_ir
-        )
+        remote.protocol_name = next_protocol
+        self.event_bus.publish(Events.IR_PROTOCOL_CHANGED, remote.protocol_name)
 
     def receive_ir(self, data: int, address: int, ctrl: int) -> None:
         """Callback function to handle received IR data, printing it and storing it in the latest_ir_data list."""
@@ -82,12 +88,18 @@ class Learn:
         if remote.name == "Add New":
             remote.name = "Remote " + str(len(self.remote.get_all_remote_names()))
             self.event_bus.publish(Events.DEVICE_LEARNED, remote)
-        else:
-            self.event_bus.publish(Events.BUTTON_LEARNED, self._active_button, remote)
+        # else:
+
+        self.event_bus.publish(Events.BUTTON_LEARNED, self._active_button, remote)
 
     def handle_button_release(self, button: str) -> None:
         if button in AllButtons.PROGRAMMABLE:
             self._active_button = button
+        elif button is AllButtons.MODE and self.state.get() == "NORMAL":
+            if self.remote.get_active_remote().name == "Add New":
+                self.request_new_remote()
+        elif button is AllButtons.MODE and self.state.get() == "LEARNING":
+            self.increment_protocol()
 
     def handle_new_device(self, device: Device) -> None:
         self._blank_remote = device

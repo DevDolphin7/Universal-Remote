@@ -128,8 +128,10 @@ class Display:
             self.update()
 
     def handle_ir_protocol_change(self, protocol: str, *args, **kwargs) -> None:
+        self.set_protocol_name(protocol)
+
         if isinstance(self._screen, LearnScreen):
-            self._screen.set_protocol_name(protocol)
+            self._screen.set_protocol_name(self._protocol_name)
             self.update()
 
     def handle_battery_level_change(self, battery_level: int) -> None:
