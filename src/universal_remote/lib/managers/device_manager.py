@@ -27,7 +27,8 @@ class DeviceManager:
         self.display = display
         self.learn = learn
 
-        self.set_protocol_interface(ir_protocol_interface)
+        self._protocol_interface = ir_protocol_interface
+        self.update_active_protocol()
 
         self._last_button_interaction = ticks_ms()
         self._button_held = False
@@ -36,10 +37,8 @@ class DeviceManager:
         self.event_bus.subscribe(Events.BUTTON_LEARNED, self.handle_button_learned)
         self.event_bus.subscribe(Events.BUTTON_RELEASED, self.handle_button_release)
 
-    def set_protocol_interface(self, ir_protocol_interface) -> None:
+    def update_active_protocol(self) -> None:
         remote = self.remote.get_active_remote()
-
-        self._protocol_interface = ir_protocol_interface
         self._protocol_interface.change_protocol_to_named(
             remote.protocol_name, self.learn.receive_ir
         )
@@ -47,6 +46,11 @@ class DeviceManager:
     def transmit_press_and_release(self, button: str) -> None:
         """Transmits an IR command and waits for the transmission to complete, raising a TimeoutError if it takes too long."""
         remote = self.remote.get_active_remote()
+
+        print("Transmitting command for button:", button)
+        print("Transmitting for remote:", remote.name)
+        print("Press command:", remote.commands[button].press)
+        print("Release command:", remote.commands[button].release)
 
         try:
             self._protocol_interface.tx.transmit(
@@ -106,6 +110,11 @@ class DeviceManager:
                 remote = self.remote.get_active_remote()
                 if button in remote.commands.keys():
                     self.transmit_press_and_release(button)
+            elif button is AllButtons.MODE:
+                print("Active remote: ", self.remote.get_active_remote())
+                self.display.set_protocol_name(self.remote.get_active_protocol())
+                self.update_active_protocol()
+                print("Active protocol changed to: ", self.remote.get_active_protocol())
         elif state == AppState.LEARNED:
             if button in AllButtons.PROGRAMMABLE:
                 self.state.set(AppState.LEARNING)
