@@ -17,9 +17,6 @@ class EventBus:
         """Publish an event to all subscribed callbacks."""
         if event_name in self._subscribers:
             for callback in self._subscribers[event_name]:
-                print(
-                    f"Event '{event_name}' triggered with args: {args}, kwargs: {kwargs}"
-                )
                 callback(*args, **kwargs)
 
     def unsubscribe(self, event_name: str, callback) -> None:
