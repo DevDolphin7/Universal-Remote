@@ -1,3 +1,4 @@
+from utime import sleep_ms
 from universal_remote.lib.core.event_bus import EventBus
 from universal_remote.lib.display.screen_normal import NormalScreen
 from universal_remote.lib.display.screen_learning import LearnScreen
@@ -85,6 +86,8 @@ class Display:
             )
         elif isinstance(self._screen, LearnScreen) and learned:
             button = self.get_button()
+
+            sleep_ms(100)
 
             self._screen.build_learned(
                 selected_button=self._button_index,
