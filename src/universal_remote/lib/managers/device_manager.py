@@ -112,7 +112,6 @@ class DeviceManager:
                     self.transmit_press_and_release(button)
             elif button is AllButtons.MODE:
                 print("Active remote: ", self.remote.get_active_remote())
-                self.display.set_protocol_name(self.remote.get_active_protocol())
                 self.update_active_protocol()
                 print("Active protocol changed to: ", self.remote.get_active_protocol())
         elif state == AppState.LEARNED:
