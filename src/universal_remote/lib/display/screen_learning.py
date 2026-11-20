@@ -17,10 +17,6 @@ class LearnScreen(AllScreens):
 
         self._remote = name
 
-    def set_protocol_name(self, protocol_name: str) -> None:
-        """Updates the protocol name to be displayed on the screen."""
-        self.protocol_name = protocol_name
-
     def build_learning(self, selected_button: int = 0, battery_charge: int = 0) -> None:
         self.build_header()
         self.build_currently_learning(selected_button)

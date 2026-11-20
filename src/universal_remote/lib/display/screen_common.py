@@ -4,12 +4,16 @@ from universal_remote.lib.drivers.epd1in54_V2 import EPD
 class AllScreens(EPD):
     def __init__(self, protocol_name: str = ""):
         super().__init__()
-        self.protocol_name = protocol_name
+        self.set_protocol_name(protocol_name)
 
         self._battery_x_y = (165, 190)
         self._battery_height = 8
         self._battery_width = 22
         self._number_battery_icons = 4
+
+    def set_protocol_name(self, protocol_name: str) -> None:
+        """Updates the protocol name to be displayed on the screen."""
+        self.protocol_name = protocol_name
 
     def build_useful_info(self) -> None:
         text = self.protocol_name
