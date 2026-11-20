@@ -3,7 +3,14 @@ from universal_remote.lib.core.event_bus import EventBus
 from universal_remote.lib.core.state import State
 from universal_remote.lib.managers.remote_manager import Remote
 from universal_remote.lib.drivers.protocol_registry import IRProtocolInterface
-from universal_remote.lib.core.types import Events, IRData, AllButtons, Commands, Device
+from universal_remote.lib.core.types import (
+    Events,
+    IRData,
+    AllButtons,
+    Commands,
+    Device,
+    AppState,
+)
 
 
 class Learn:
@@ -69,7 +76,10 @@ class Learn:
         self.event_bus.publish(Events.IR_RECEIVED, publish_data)
 
     def handle_ir_received(self, datas: list[IRData]) -> None:
-        if self._blank_remote:
+        if self.state.get() != AppState.LEARNING:
+            return
+
+        if self._blank_remote != None:
             remote = self._blank_remote
             self._blank_remote = None
         else:
@@ -88,18 +98,23 @@ class Learn:
         if remote.name == "Add New":
             remote.name = "Remote " + str(len(self.remote.get_all_remote_names()))
             self.event_bus.publish(Events.DEVICE_LEARNED, remote)
-        # else:
 
         self.event_bus.publish(Events.BUTTON_LEARNED, self._active_button, remote)
 
     def handle_button_release(self, button: str) -> None:
+        if self.state.get() != AppState.LEARNING:
+            return
+
         if button in AllButtons.PROGRAMMABLE:
             self._active_button = button
-        elif button is AllButtons.MODE and self.state.get() == "NORMAL":
+        elif button is AllButtons.MODE and self.state.get() == AppState.NORMAL:
             if self.remote.get_active_remote().name == "Add New":
                 self.request_new_remote()
-        elif button is AllButtons.MODE and self.state.get() == "LEARNING":
+        elif button is AllButtons.MODE and self.state.get() == AppState.LEARNING:
             self.increment_protocol()
 
     def handle_new_device(self, device: Device) -> None:
+        if self.state.get() != AppState.LEARNING:
+            return
+
         self._blank_remote = device
