@@ -1,5 +1,6 @@
 from utime import sleep_ms
 from universal_remote.lib.core.event_bus import EventBus
+from universal_remote.lib.managers.remote_manager import Remote
 from universal_remote.lib.display.screen_normal import NormalScreen
 from universal_remote.lib.display.screen_learning import LearnScreen
 from universal_remote.lib.core.types import (
@@ -14,16 +15,12 @@ class Display:
     def __init__(
         self,
         event_bus: EventBus,
+        remote: Remote,
         state: str = AppState.NORMAL,
-        remote_names: list[str] = [],
-        protocol_name: str = "",
         battery_charge: int = 0,
     ) -> None:
-        self._remote_index = 0
-        self._learning_remote = ""
+        self._remote = remote
 
-        self.set_protocol_name(protocol_name)
-        self.set_remote_names(remote_names)
         self.set_battery_charge(battery_charge)
         self.set_buttons()
         self.set_button_index(self._buttons[0])
@@ -42,28 +39,17 @@ class Display:
     def get_button(self) -> str:
         return self._buttons[self._button_index]
 
-    def set_remote_index_from_device(self, device: Device) -> None:
-        for index, name in enumerate(self._remote_names):
-            if name == device.name:
-                self._remote_index = index
-                break
-
-    def set_protocol_name(self, protocol_name: str) -> None:
-        self._protocol_name = protocol_name
-
-    def set_remote_names(self, remote_names: list[str]) -> None:
-        self._remote_names = remote_names
-
     def set_screen(self, state: str) -> None:
         if state == AppState.NORMAL:
             self._screen = NormalScreen(
-                menu_items=self._remote_names, protocol_name=self._protocol_name
+                menu_items=self._remote.get_all_remote_names(),
+                protocol_name=self._remote.get_active_protocol(),
             )
         elif state == AppState.LEARNING:
             self._screen = LearnScreen(
-                remote=self._learning_remote,
+                remote=self._remote.get_active_remote().name,
                 buttons=self._buttons,
-                protocol_name=self._protocol_name,
+                protocol_name=self._remote.get_active_protocol(),
             )
 
     def set_battery_charge(self, charge: int) -> None:
@@ -78,7 +64,8 @@ class Display:
     def update(self, learned: Device | None = None) -> None:
         if isinstance(self._screen, NormalScreen):
             self._screen.build(
-                selected_remote=self._remote_index, battery_charge=self._battery_charge
+                selected_remote=self._remote.get_selected(),
+                battery_charge=self._battery_charge,
             )
         elif isinstance(self._screen, LearnScreen) and not learned:
             self._screen.build_learning(
@@ -106,22 +93,17 @@ class Display:
             self.update()
 
     def handle_device_change(self, device: Device) -> None:
-        self.set_remote_index_from_device(device)
+        self._screen.set_protocol_name(self._remote.get_active_protocol())
         self.update()
 
     def handle_device_added(self, devices: list[Device]) -> None:
-        remote_names = [device.name for device in devices]
-
-        self.set_remote_names(remote_names=remote_names)
-
         if isinstance(self._screen, NormalScreen):
-            self._screen.set_menu_items(remote_names)
+            self._screen.set_menu_items(self._remote.get_all_remote_names())
 
         self.update()
 
     def handle_state_change(self, state: str, *args, **kwargs) -> None:
         if state == AppState.LEARNING and isinstance(self._screen, NormalScreen):
-            self._learning_remote = self._screen.menu_items[self._remote_index]
             self.set_screen(state)
             self.update()
         elif state == AppState.LEARNED and isinstance(self._screen, LearnScreen):
@@ -130,11 +112,9 @@ class Display:
             self.set_screen(state)
             self.update()
 
-    def handle_ir_protocol_change(self, protocol: str, *args, **kwargs) -> None:
-        self.set_protocol_name(protocol)
-
+    def handle_ir_protocol_change(self, *args, **kwargs) -> None:
         if isinstance(self._screen, LearnScreen):
-            self._screen.set_protocol_name(self._protocol_name)
+            self._screen.set_protocol_name(self._remote.get_active_protocol())
             self.update()
 
     def handle_battery_level_change(self, battery_level: int) -> None:
