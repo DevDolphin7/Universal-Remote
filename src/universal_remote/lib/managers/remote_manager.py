@@ -30,6 +30,9 @@ class Remote:
     def get_active_remote(self) -> Device:
         return self._remotes[self._selected]
 
+    def get_selected(self) -> int:
+        return self._selected
+
     def get_all_remotes(self) -> list[Device]:
         return self._remotes
 

@@ -32,8 +32,7 @@ power = Power(event_bus)
 
 display = Display(
     event_bus,
-    remote_names=remote.get_all_remote_names(),
-    protocol_name=remote.get_active_protocol(),
+    remote=remote,
     battery_charge=power.state,
 )
 
