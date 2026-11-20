@@ -47,11 +47,6 @@ class DeviceManager:
         """Transmits an IR command and waits for the transmission to complete, raising a TimeoutError if it takes too long."""
         remote = self.remote.get_active_remote()
 
-        print("Transmitting command for button:", button)
-        print("Transmitting for remote:", remote.name)
-        print("Press command:", remote.commands[button].press)
-        print("Release command:", remote.commands[button].release)
-
         try:
             self._protocol_interface.tx.transmit(
                 remote.address, remote.commands[button].press
@@ -67,14 +62,6 @@ class DeviceManager:
             )
         except:
             pass
-
-        # time_elapsed = 0
-        # while self._protocol_interface.tx.busy():
-        #     if time_elapsed > self._timeout:
-        #         raise TimeoutError("Transmission timeout")
-
-        #     sleep_ms(self._timeout_interval)
-        #     time_elapsed += self._timeout_interval
 
     def update(self) -> None:
         if self.state.get() == AppState.LEARNING:
@@ -111,9 +98,7 @@ class DeviceManager:
                 if button in remote.commands.keys():
                     self.transmit_press_and_release(button)
             elif button is AllButtons.MODE:
-                print("Active remote: ", self.remote.get_active_remote())
                 self.update_active_protocol()
-                print("Active protocol changed to: ", self.remote.get_active_protocol())
         elif state == AppState.LEARNED:
             if button in AllButtons.PROGRAMMABLE:
                 self.state.set(AppState.LEARNING)

@@ -9,15 +9,6 @@ from universal_remote.lib.managers.device_manager import DeviceManager
 from universal_remote.lib.managers.display_manager import Display
 from universal_remote.lib.managers.button_manager import Buttons
 from universal_remote.lib.storage.storage import Storage
-from universal_remote.lib.core.types import Events, Device, AllButtons, Commands
-
-remote = Device(
-    id=0,
-    name=f"Remote {0}",
-    protocol_name="NEC_8",
-    address=0 + 1,
-    commands={AllButtons.NAV_OK: Commands(press=0 + 2, release=0 + 3)},
-)
 
 event_bus = EventBus()
 
@@ -50,33 +41,9 @@ buttons = Buttons(event_bus)
 
 display.update()
 
-
-def print_ir_data(ir_datas):
-    count = 0
-    for data in ir_datas:
-        print(
-            data.address, "<<>>", data.command, "<<>>", data.ticks_diff, "<<>>", count
-        )
-        count += 1
-
-
-def print_button(button):
-    print("Button pressed: ", button)
-
-
-def print_device_change(device):
-    print(device.name)
-
-
-event_bus.subscribe(Events.IR_RECEIVED, print_ir_data)
-event_bus.subscribe(Events.BUTTON_RELEASED, print_button)
-event_bus.subscribe(Events.DEVICE_CHANGED, print_device_change)
-
 count = 0
 while True:
     device_manager.update()
     buttons.update()
-    if count % 100 == 0:
-        print(device_manager.state.get(), "<<< state     ")
     count += 1
     sleep_ms(100)

@@ -63,7 +63,6 @@ class Remote:
             self.set_selected(0)
         else:
             self.set_selected(self._selected + 1)
-        print("selected: ", self._selected)
 
     def handle_button_released(self, button: str, *args, **kwargs) -> None:
         if button == AllButtons.MODE and self._app_state == AppState.NORMAL:
@@ -75,14 +74,8 @@ class Remote:
 
     def handle_device_learn(self, remote: Device, *args, **kwargs) -> None:
         self._remotes.insert(len(self._remotes) - 1, remote)
-        for remote in self._remotes:
-            print("remote: ", remote.name, "        commands: ", remote.commands)
-        # self.set_selected(len(self._remotes) - 1)
-        # self.set_remotes(self._remotes)
         self.event_bus.publish(Events.DEVICE_ADDED, self.get_all_remotes())
-        self.storage.save_devices(
-            self.get_all_remotes()[:-1]
-        )  # Save all remotes except the "Add New" remote to storage
+        self.storage.save_devices(self.get_all_remotes()[:-1])
 
     def handle_ir_protocol_change(self, protocol_name: str, *args, **kwargs) -> None:
         self.get_active_remote().protocol_name = protocol_name

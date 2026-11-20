@@ -118,7 +118,6 @@ class EPD:
 
     def clear(self):
         self.frame_buffer.fill(0xFF)
-        # self.frame_buffer.rect(10, 20, 30, 50, 0, True)
 
         self.update()
 

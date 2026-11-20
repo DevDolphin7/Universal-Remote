@@ -44,8 +44,6 @@ class Receiver:
 
         self._last_rx_ticks = ticks_ms()
 
-        # Publish event
-
     def close(self) -> None:
         """Closes the IR receiver."""
         self._protocol.rx.close()
